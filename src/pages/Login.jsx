@@ -2,6 +2,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Stack from "react-bootstrap/Stack";
 
 import { useAuth } from "../service/authProvider";
 import AuthService from "../service/auth";
@@ -20,11 +24,11 @@ export function LoginPage() {
     let formData = new FormData(event.currentTarget);
     let username = formData.get("username").trim();
     let password = formData.get("password").trim();
-    if (!username || username.length < 5) {
+    if (!username || username.length < 3) {
       setMessage("Username length must be at least 5 symbols");
       return;
     }
-    if (!password || password.length < 8) {
+    if (!password || password.length < 3) {
       setMessage("Password length must be at least 8 symbols");
       return;
     }
@@ -35,6 +39,8 @@ export function LoginPage() {
           const user = {
             name: "Aigul",
           };
+          localStorage.setItem("token", data.accessToken);
+          localStorage.setItem("refresh-token", data.refreshToken);
           auth.signin(user, () => {
             // Send them back to the page they tried to visit when they were
             // redirected to the login page. Use { replace: true } so we don't create
@@ -58,15 +64,18 @@ export function LoginPage() {
   }
 
   return (
-    <div>
-      <Alert key={"warning"} variant={"warning"}>
-        You must log in to view the page at {from}
-      </Alert>
-      {message && (
-        <Alert key={"danger"} variant={"danger"}>
-          {message}
+    <Container >
+      <Stack gap={3} style={{ paddingTop: "50px" }}>
+        <Alert key={"warning"} variant={"warning"}>
+          You must log in to view the page at {from}
         </Alert>
-      )}
+
+        {message && (
+          <Alert key={"danger"} variant={"danger"}>
+            {message}
+          </Alert>
+        )}
+      </Stack>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Username</Form.Label>
@@ -93,6 +102,6 @@ export function LoginPage() {
           Login
         </Button>
       </Form>
-    </div>
+    </Container>
   );
 }

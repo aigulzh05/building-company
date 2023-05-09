@@ -1,14 +1,12 @@
 import api from "./http";
 
-const fakeLoginResponse = () => {
-  return {
-    accessToken: "accesss",
-    refreshToken: "reffffff",
-  };
+const fakeLoginResponse = {
+  accessToken: "accesss",
+  refreshToken: "reffffff",
 };
 function login(username, password) {
-  return api.post("/authenticate", { username, password });
-  //   return fakeLoginResponse();
+  // return api.post("/authenticate", { username, password });
+  return Promise.resolve(fakeLoginResponse);
 }
 
 function register(name, username, password) {

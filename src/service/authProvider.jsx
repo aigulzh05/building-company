@@ -40,28 +40,6 @@ export function useAuth() {
   return React.useContext(AuthContext);
 }
 
-export function AuthStatus() {
-  let auth = useAuth();
-  let navigate = useNavigate();
-
-  if (!auth.user) {
-    return <p>You are not logged in.</p>;
-  }
-
-  return (
-    <p>
-      Welcome {auth.user.name}!{" "}
-      <button
-        onClick={() => {
-          auth.signout(() => navigate("/"));
-        }}
-      >
-        Sign out
-      </button>
-    </p>
-  );
-}
-
 export function RequireAuth({ children }) {
   let auth = useAuth();
   let location = useLocation();
