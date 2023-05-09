@@ -22,6 +22,7 @@ export default function App() {
               </RequireAuth>
             }
           />
+          <Route path="*" element={<p>Not Found</p>} />
         </Route>
       </Routes>
     </AuthProvider>
