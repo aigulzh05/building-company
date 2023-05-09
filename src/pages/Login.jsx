@@ -48,7 +48,6 @@ export function LoginPage() {
         if (data.error) {
           setMessage(data.error);
         }
-        return 1;
       })
       .catch((error) => {
         console.log(error);
