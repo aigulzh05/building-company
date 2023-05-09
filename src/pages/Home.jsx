@@ -1,7 +1,11 @@
+import { useState } from "react";
 import Accordion from "react-bootstrap/Accordion";
-import Container from "react-bootstrap/esm/Container";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import Col from "react-bootstrap/esm/Col";
+import Row from "react-bootstrap/esm/Row";
+import Stack from "react-bootstrap/esm/Stack";
+import Form from "react-bootstrap/Form";
 
 const cards = [
   {
@@ -51,31 +55,44 @@ const cards = [
   },
 ];
 export function HomePage() {
+  const [loading, setLoading] = useState(false);
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    // let formData = new FormData(event.currentTarget);
+    // let username = formData.get("username").trim();
+    // let password = formData.get("password").trim();
+  }
+
   return (
     <div style={{ padding: "20px" }}>
       <h2 style={{ textAlign: "center" }}>Home page</h2>
       <div
         style={{
           display: "flex",
+          justifyContent: "space-around",
           gap: 30,
           flexDirection: "row",
           flexWrap: "wrap",
           paddingBlock: "20px",
         }}
       >
-        {cards.map((card) => (
+        {cards.map((card, index) => (
           <Card style={{ width: "18rem" }}>
             <Card.Img variant="top" src={card.image} />
             <Card.Body>
               <Card.Title>{card.title}</Card.Title>
               <Card.Text>{card.text}</Card.Text>
               <a href={card.actionUrl} target={"_blank"}>
-                <Button variant="primary">{card.actionText}</Button>
+                <Button variant={index == 0 ? "primary" : "secondary"}>
+                  {card.actionText}
+                </Button>
               </a>
             </Card.Body>
           </Card>
         ))}
       </div>
+      <h3 style={{ textAlign: "center", paddingTop: "20px" }}>Вопросы</h3>
 
       <Accordion defaultActiveKey="0">
         <Accordion.Item eventKey="0">
@@ -103,6 +120,67 @@ export function HomePage() {
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
+
+      <h3 style={{ textAlign: "center", paddingTop: "20px" }}>Контакты</h3>
+
+      <Form style={{ paddingBlock: "20px" }} onSubmit={handleSubmit}>
+        <Row>
+          <Col>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="name"
+                placeholder="Enter username"
+              />
+              <Form.Text className="text-muted">Enter your name.</Form.Text>
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Phone</Form.Label>
+              <Form.Control
+                type="text"
+                name="phone"
+                placeholder="Enter phone"
+              />
+              <Form.Text className="text-muted">
+                Enter your phone number for contact
+              </Form.Text>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>Message</Form.Label>
+          <Form.Control
+            type="text"
+            name="message"
+            placeholder="Enter message text"
+          />
+          <Form.Text className="text-muted">Enter your message</Form.Text>
+        </Form.Group>
+
+        <Button variant="primary" disabled={loading} type="submit">
+          Send
+        </Button>
+      </Form>
+
+      <Row>
+        <Col>
+          <Stack>
+            <p>O!: +996 555 123 123</p>
+            <p>Beeline: +996 555 123 123</p>
+            <p>Mega: +996 555 123 123</p>
+          </Stack>
+        </Col>
+        <Col>
+          <Stack>
+            <p> Email: contact.me@building.com</p>
+            <p> Email: contact.me@building.com</p>
+            <p> Email: contact.me@building.com</p>
+          </Stack>
+        </Col>
+      </Row>
     </div>
   );
 }
