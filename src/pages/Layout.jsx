@@ -23,15 +23,27 @@ export function Layout() {
       {/* <AuthStatus /> */}
       <Navbar collapseOnSelect expand="md" bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand href="/">Building Co.</Navbar.Brand>
+          <Navbar.Brand href="/">HORIZON BUILDERS</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link as={Link} to="/">
-                Home
+                HOME
+              </Nav.Link>
+              <Nav.Link as={Link} to="/about">
+                ABOUT
+              </Nav.Link>
+              <Nav.Link as={Link} to="/build">
+                OUR BUILDINGS
+              </Nav.Link>
+              <Nav.Link as={Link} to="/contact">
+                CONTACT
               </Nav.Link>
               <Nav.Link as={Link} to="/edit">
-                Edit
+                EDIT
+              </Nav.Link>
+              <Nav.Link as={Link} to="/position">
+                Position
               </Nav.Link>
               {/* <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>

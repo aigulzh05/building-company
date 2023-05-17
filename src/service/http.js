@@ -1,5 +1,5 @@
 import axios from "axios";
-export const API_URL = `http://3.34.2.208:5000/api`;
+export const API_URL = `http://3.34.2.208:5000`;
 
 const ACCESS_TOKEN_NAME = "token";
 const REFRESH_TOKEN_NAME = "refresh-token";
@@ -30,7 +30,7 @@ $api.interceptors.response.use(
       originalRequest._isRetry = true;
       try {
         const response = (await axios.post)(
-          `${API_URL}/refresh-token`,
+          `${API_URL}/api/refresh-token`,
           {
             withCredentials: true,
           },

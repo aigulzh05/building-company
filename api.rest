@@ -1,0 +1,117 @@
+# auth
+POST http://3.34.2.208:5000/api/authenticate HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "username",
+    "password":"password"
+}
+
+###
+POST http://3.34.2.208:5000/api/refresh-token HTTP/1.1
+Content-Type: application/json
+{
+    "refreshToken": "7d35c333-ecde-409a-8901-2da3c10675fa",
+ }
+
+####################################################################################
+####################################################################################
+####################################################################################
+# global type
+POST http://3.34.2.208:5000/global-type HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDA4MjU2OCwiZXhwIjoxNjg0MDg0MzY4fQ.fLtrpYQkpMwc2s-fzQTcS3RFVfqJ1HQ6dSaCdrKjglo
+Content-Type: application/json
+
+{
+    "name": "sample"
+}
+
+###
+GET  http://3.34.2.208:5000/global-type HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDA4MjU2OCwiZXhwIjoxNjg0MDg0MzY4fQ.fLtrpYQkpMwc2s-fzQTcS3RFVfqJ1HQ6dSaCdrKjglo
+Content-Type: application/json
+
+####################################################################################
+####################################################################################
+####################################################################################
+# user
+###
+GET  http://3.34.2.208:5000/api/user/1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDA4MzQwMCwiZXhwIjoxNjg0MDg1MjAwfQ.f0O6r-m_ErkHqOfzU-5BXfXULK3_tQFKw2kmUsHhW74
+Content-Type: application/json
+
+# update user
+###
+PUT  http://3.34.2.208:5000/api/user/2 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDA4MjU2OCwiZXhwIjoxNjg0MDg0MzY4fQ.fLtrpYQkpMwc2s-fzQTcS3RFVfqJ1HQ6dSaCdrKjglo
+Content-Type: application/json
+
+{
+ "firstName": "aigulfirstName",
+  "lastName": "aigullastName",
+  "photo": "someUrl",
+  "phoneNumber": "12345678",
+  "address": "Bishkek"
+}
+
+# create user
+###
+POST  http://3.34.2.208:5000/api/user
+?positionId=1
+&username=aigul
+&password=aigul HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDA4MjU2OCwiZXhwIjoxNjg0MDg0MzY4fQ.fLtrpYQkpMwc2s-fzQTcS3RFVfqJ1HQ6dSaCdrKjglo
+Content-Type: application/json
+
+####################################################################################
+####################################################################################
+####################################################################################
+# position
+###
+GET  http://3.34.2.208:5000/position HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDA4OTYwMCwiZXhwIjoxNjg0MDkxNDAwfQ.LpVfduZNZcNGq2sEUPZ76QFv54ew8oNqAO-wn2QBDWk
+Content-Type: application/json
+
+# position  create
+###
+POST  http://3.34.2.208:5000/position
+?name=manager
+&salary=2000 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDA4MzQwMCwiZXhwIjoxNjg0MDg1MjAwfQ.f0O6r-m_ErkHqOfzU-5BXfXULK3_tQFKw2kmUsHhW74
+Content-Type: application/json
+
+# position  get id
+###
+GET  http://3.34.2.208:5000/position/2 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDA4MzQwMCwiZXhwIjoxNjg0MDg1MjAwfQ.f0O6r-m_ErkHqOfzU-5BXfXULK3_tQFKw2kmUsHhW74
+Content-Type: application/json
+
+# position  update id
+###
+PUT  http://3.34.2.208:5000/position/2
+?name=manager
+&salary=1000 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDA4MzQwMCwiZXhwIjoxNjg0MDg1MjAwfQ.f0O6r-m_ErkHqOfzU-5BXfXULK3_tQFKw2kmUsHhW74
+Content-Type: application/json
+
+# position  delete id
+###
+DELETE  http://3.34.2.208:5000/position/2 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDA4MzQwMCwiZXhwIjoxNjg0MDg1MjAwfQ.f0O6r-m_ErkHqOfzU-5BXfXULK3_tQFKw2kmUsHhW74
+Content-Type: application/json
+
+
+####################################################################################
+####################################################################################
+####################################################################################
+# building
+###
+GET  http://3.34.2.208:5000/building HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDA4MzQwMCwiZXhwIjoxNjg0MDg1MjAwfQ.f0O6r-m_ErkHqOfzU-5BXfXULK3_tQFKw2kmUsHhW74
+Content-Type: application/json
+
+# building detail
+###
+GET  http://3.34.2.208:5000/building/1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDA4MzQwMCwiZXhwIjoxNjg0MDg1MjAwfQ.f0O6r-m_ErkHqOfzU-5BXfXULK3_tQFKw2kmUsHhW74
+Content-Type: application/json

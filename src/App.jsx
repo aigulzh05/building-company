@@ -6,6 +6,10 @@ import { Layout } from "./pages/Layout";
 import { LoginPage } from "./pages/Login";
 import { HomePage } from "./pages/Home";
 import { EditPage } from "./pages/Edit";
+import { AboutPage } from "./pages/About";
+import { BuildingsPage } from "./pages/Buildings";
+import { ContactPage } from "./pages/Contact";
+import { PositionPage } from "./pages/Position";
 
 export default function App() {
   return (
@@ -14,6 +18,18 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/build" element={<BuildingsPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route
+            path="/position"
+            element={
+              //<RequireAuth>
+              <PositionPage />
+               //</RequireAuth>
+            }
+          />
+
           <Route
             path="/edit"
             element={

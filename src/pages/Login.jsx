@@ -34,13 +34,13 @@ export function LoginPage() {
     }
     setLoading(true);
     AuthService.login(username, password)
-      .then((data) => {
-        if (data.accessToken && data.refreshToken) {
+      .then((res) => {
+        if (res.data.accessToken && res.data.refreshToken) {
           const user = {
             name: "Aigul",
           };
-          localStorage.setItem("token", data.accessToken);
-          localStorage.setItem("refresh-token", data.refreshToken);
+          localStorage.setItem("token", res.data.accessToken);
+          localStorage.setItem("refresh-token", res.data.refreshToken);
           auth.signin(user, () => {
             // Send them back to the page they tried to visit when they were
             // redirected to the login page. Use { replace: true } so we don't create
