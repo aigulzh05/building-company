@@ -37,12 +37,12 @@ Content-Type: application/json
 # user list
 ###
 GET  http://3.34.2.208:5000/api/user?pageNo=0&pageSize=3 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDM2ODMyOSwiZXhwIjoxNjg0MzcwMTI5fQ.SKn1WQ5eiLqqbsKym2V0HKncJYCnB5xstf5D-PLuOrs
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDQzNDI0MywiZXhwIjoxNjg0NDM2MDQzfQ.hVnlPhHE0CRPzBYJqtw9Zs2ny53_jX54xezIdsj-qBg
 Content-Type: application/json
 # user
 ###
-GET  http://3.34.2.208:5000/api/user/1 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDM2ODMyOSwiZXhwIjoxNjg0MzcwMTI5fQ.SKn1WQ5eiLqqbsKym2V0HKncJYCnB5xstf5D-PLuOrs
+GET  http://3.34.2.208:5000/api/me HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDQzNDI0MywiZXhwIjoxNjg0NDM2MDQzfQ.hVnlPhHE0CRPzBYJqtw9Zs2ny53_jX54xezIdsj-qBg
 Content-Type: application/json
 
 # update user

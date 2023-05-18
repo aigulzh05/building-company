@@ -2,44 +2,28 @@ import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/esm/Modal";
 import Form from "react-bootstrap/Form";
-import Pagination from "react-bootstrap/Pagination";
 import Table from "react-bootstrap/Table";
 
 import UserService from "../service/user";
-import PositionService from "../service/position";
 
 const FakeUsers = {
-  content: [
-    {
-      id: 1,
-      username: "username",
-      firstName: "Bekzhan",
-      lastName: "Satiev",
-      photoUrl:
-        "https://res.cloudinary.com/dks4go0cw/image/upload/v1684339473/cdjwh4pj2uzwiqxnm9a2.png",
-      phoneNumber: "56789",
-      address: "California",
-      position: {
-        id: 1,
-        name: "admin",
-        salary: 1500.0,
-      },
-    },
-  ],
-  totalPages: 1,
-  totalElements: 1,
-  last: true,
-  size: 3,
-  number: 0,
-  numberOfElements: 1,
-  first: true,
-  empty: false,
+  id: 1,
+  username: "username",
+  firstName: "Bekzhan",
+  lastName: "Satiev",
+  photoUrl:
+    "https://res.cloudinary.com/dks4go0cw/image/upload/v1684339473/cdjwh4pj2uzwiqxnm9a2.png",
+  phoneNumber: "56789",
+  address: "California",
+  position: {
+    id: 1,
+    name: "admin",
+    salary: 1500.0,
+  },
 };
 
-export function UserPage() {
-  const [users, setUsers] = useState(null);
-  const [page, setPage] = useState(0);
-  const [userId, setUserId] = useState(0);
+export function SettingsPage() {
+  const [me, setMe] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [modalName, setModal] = useState("");
@@ -49,54 +33,38 @@ export function UserPage() {
   const [address, setAddress] = useState("");
   const [show, setShow] = useState(false);
 
-  const [positions, setPositions] = useState([]);
-  const [positionId, setPositionId] = useState(0);
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const [photoUrl, setPhotoUrl] = useState("");
   const [photo, setPhoto] = useState(null);
 
   useEffect(() => {
-    getUsersFromServer(0);
+    getMeFromServer();
   }, []);
 
-  const getUsersFromServer = (pageNumber) => {
+  const getMeFromServer = () => {
     setLoading(true);
-    UserService.list(pageNumber)
+    UserService.detailMe()
       .then((res) => {
         console.log({ res });
         if (res.error) {
           setMessage(res.error);
           return;
         }
-        setUsers(res.data);
-        setPage(pageNumber);
+        setMe(res.data);
       })
       .catch((error) => {
         console.log({ error });
-        setUsers(FakeUsers);
+        setMe(FakeUsers);
       })
       .finally(() => {
         setLoading(false);
       });
-  };
-  const getPositionsFromServer = () => {
-    PositionService.list()
-      .then((res) => {
-        console.log(res);
-        setPositions(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        setPositions(FakePostions);
-      })
-      .finally(() => {});
   };
 
   const updateUserFromServer = () => {
     setLoading(true);
-    UserService.update(userId, firstName, lastName, phoneNumber, address)
+    UserService.updateMe(firstName, lastName, phoneNumber, address)
       .then((res) => {
         console.log(res);
       })
@@ -104,28 +72,14 @@ export function UserPage() {
         console.log(error);
       })
       .finally(() => {
-        getUsersFromServer(page);
+        getMeFromServer();
         setLoading(false);
       });
   };
-  const createUserFromServer = () => {
-    setLoading(true);
 
-    UserService.save(positionId, username, password)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        getUsersFromServer(0);
-        setLoading(false);
-      });
-  };
   const updatePasswordFromServer = () => {
     setLoading(true);
-    UserService.updatePassword(userId, password)
+    UserService.updatePasswordMe(password)
       .then((res) => {
         console.log(res);
       })
@@ -133,12 +87,12 @@ export function UserPage() {
         console.log(error);
       })
       .finally(() => {
-        getUsersFromServer(page);
+        getMeFromServer();
         setLoading(false);
       });
   };
   const updatePhotoFromServer = () => {
-    UserService.updatePhoto(userId, photo)
+    UserService.updatePhotoMe(photo)
       .then((res) => {
         console.log(res);
       })
@@ -146,51 +100,31 @@ export function UserPage() {
         console.log(error);
       })
       .finally(() => {
-        getUsersFromServer(page);
+        getMeFromServer();
       });
   };
   const handleClose = () => {
     setShow(false);
-    // setUserId(0);
     // setName('');
-    // setSalary(0);
   };
-  const handleShow = (id, action) => {
+  const handleShow = (action) => {
     setModal(action);
     setTimeout(() => setShow(true), 300);
-    if (action === "create") {
-      //create
-      setUserId(0);
-      setUsername("");
-      setPassword("");
-      setPositionId(0);
-      if (positions.length === 0) {
-        getPositionsFromServer();
-      }
-    }
+
     if (action === "update") {
       //update
-      const thisUser = users?.content?.filter((u) => u.id === id)[0];
-      setUserId(thisUser.id);
-      setFirstName(thisUser.firstName);
-      setLastName(thisUser.lastName);
-      setPhoneNumber(thisUser.phoneNumber);
-      setAddress(thisUser.address);
-      if (positions.length === 0) {
-        getPositionsFromServer();
-      }
+      setFirstName(me.firstName);
+      setLastName(me.lastName);
+      setPhoneNumber(me.phoneNumber);
+      setAddress(me.address);
     }
     if (action === "photo") {
       //photo
-      const thisUser = users?.content?.filter((u) => u.id === id)[0];
-      console.log({ thisUser });
-      setPhotoUrl(thisUser.photoUrl);
-      setUserId(thisUser.id);
+      setPhotoUrl(me.photoUrl);
       setPhoto(null);
     }
     if (action === "password") {
       //password
-      setUserId(id);
       setPassword("");
     }
   };
@@ -198,9 +132,7 @@ export function UserPage() {
   function handleSave(event) {
     event.preventDefault();
     setShow(false);
-    if (modalName === "create") {
-      createUserFromServer();
-    }
+
     if (modalName === "update") {
       updateUserFromServer();
     }
@@ -212,97 +144,71 @@ export function UserPage() {
     }
   }
 
-  const handlePage = (pageNumber) => {
-    getUsersFromServer(pageNumber);
-  };
   return (
     <div className="p-2">
-      <h2 className="text-center">user page</h2>
+      <h2 className="text-center">Settings page</h2>
 
       {message}
-      {users ? (
-        <Button
-          className="my-2"
-          variant="primary"
-          onClick={() => handleShow(0, "create")}
-        >
-          Add user
-        </Button>
-      ) : null}
-      {users ? (
+
+      {me ? (
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th>#</th>
               <th>Username</th>
               <th>First Name</th>
               <th>Last Name</th>
               <th>Photo</th>
+              <th>Position</th>
+              <th>Salary</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {users?.content?.map((user, index) => (
-              <tr key={user.id}>
-                <td>{index + 1 + page * 2}</td>
-                <td>{user.username}</td>
-                <td>{user.firstName}</td>
-                <td>{user.lastName}</td>
-                <td>
-                  {user.photoUrl ? (
-                    <img src={user.photoUrl} alt="Avatar" className="avatar" />
-                  ) : (
-                    <img
-                      src={"https://www.w3schools.com/w3images/avatar2.png"}
-                      alt="AvatarDefault"
-                      className="avatar"
-                    />
-                  )}
-                </td>
-                <td>
-                  <div className="d-flex flex-row justify-content-start gap-3">
-                    <Button
-                      onClick={() => handleShow(user.id, "update")}
-                      variant="outline-primary"
-                      size="sm"
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      onClick={() => handleShow(user.id, "photo")}
-                      variant="outline-secondary"
-                      size="sm"
-                    >
-                      Photo
-                    </Button>
-                    <Button
-                      onClick={() => handleShow(user.id, "password")}
-                      variant="outline-success"
-                      size="sm"
-                    >
-                      Password
-                    </Button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+            <tr key={me.id}>
+              <td>{me.username}</td>
+              <td>{me.firstName}</td>
+              <td>{me.lastName}</td>
+              <td>
+                {me.photoUrl ? (
+                  <img src={me.photoUrl} alt="Avatar" className="avatar" />
+                ) : (
+                  <img
+                    src={"https://www.w3schools.com/w3images/avatar2.png"}
+                    alt="AvatarDefault"
+                    className="avatar"
+                  />
+                )}
+              </td>
+              <td>{me.position?.name}</td>
+              <td>{me.position?.salary}</td>
+              <td>
+                <div className="d-flex flex-row justify-content-start gap-3">
+                  <Button
+                    onClick={() => handleShow("update")}
+                    variant="outline-primary"
+                    size="sm"
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    onClick={() => handleShow("photo")}
+                    variant="outline-secondary"
+                    size="sm"
+                  >
+                    Photo
+                  </Button>
+                  <Button
+                    onClick={() => handleShow("password")}
+                    variant="outline-success"
+                    size="sm"
+                  >
+                    Password
+                  </Button>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </Table>
-      ) : null}
-      {modalName === "create" ? (
-        <CreateModal
-          show={show}
-          handleClose={handleClose}
-          handleSave={handleSave}
-          modalName={modalName}
-          positions={positions}
-          positionId={positionId}
-          username={username}
-          password={password}
-          setPositionId={setPositionId}
-          setUsername={setUsername}
-          setPassword={setPassword}
-        />
       ) : null}
 
       {modalName === "update" ? (
@@ -343,98 +249,9 @@ export function UserPage() {
           setPhoto={setPhoto}
         />
       ) : null}
-
-      {users?.totalPages ? (
-        <Pagination style={{ justifyContent: "center" }}>
-          {Array.from(Array(users.totalPages).keys()).map((_, number) => (
-            <Pagination.Item
-              key={number}
-              active={number === page}
-              onClick={() => handlePage(number)}
-            >
-              {number + 1}
-            </Pagination.Item>
-          ))}
-        </Pagination>
-      ) : null}
     </div>
   );
 }
-
-const CreateModal = ({
-  show,
-  handleClose,
-  handleSave,
-  modalName,
-  positions,
-  positionId,
-  username,
-  password,
-  setPositionId,
-  setUsername,
-  setPassword,
-}) => (
-  <Modal show={show} onHide={handleClose}>
-    <Modal.Header closeButton>
-      <Modal.Title>User {modalName}</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-      <Form.Group className="mb-3" controlId="formBasicUsername">
-        <Form.Label>Username</Form.Label>
-        <Form.Control
-          type="text"
-          name="username"
-          value={username}
-          onChange={(e) => {
-            setUsername(e.target.value.trim());
-          }}
-          placeholder="Enter username"
-        />
-        <Form.Text className="text-muted">Enter username.</Form.Text>
-      </Form.Group>
-
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label>Password</Form.Label>
-        <Form.Control
-          type="text"
-          name="password"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value.trim());
-          }}
-          placeholder="Enter password"
-        />
-        <Form.Text className="text-muted">Enter password</Form.Text>
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicPosition">
-        <Form.Label>Position</Form.Label>
-        <Form.Select
-          aria-label="position select"
-          selected={positionId}
-          onChange={(e) => setPositionId(e.target.value)}
-        >
-          <option value={0} key={0}>
-            Choose position
-          </option>
-          {positions?.content?.map((pos) => (
-            <option key={pos.id} value={pos.id}>
-              {pos.name} - ${pos.salary}
-            </option>
-          ))}
-        </Form.Select>
-        <Form.Text className="text-muted">Choose postion</Form.Text>
-      </Form.Group>
-    </Modal.Body>
-    <Modal.Footer>
-      <Button variant="secondary" onClick={handleClose}>
-        Close
-      </Button>
-      <Button variant="primary" onClick={handleSave}>
-        Create
-      </Button>
-    </Modal.Footer>
-  </Modal>
-);
 
 const UpdateModal = ({
   show,

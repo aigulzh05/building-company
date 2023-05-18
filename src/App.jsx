@@ -10,6 +10,10 @@ import { AboutPage } from "./pages/About";
 import { BuildingsPage } from "./pages/Buildings";
 import { ContactPage } from "./pages/Contact";
 import { PositionPage } from "./pages/Position";
+import { GlobalTypePage } from "./pages/GlobalType";
+import { SubTypePage } from "./pages/SubType";
+import { ProductPage } from "./pages/Product";
+import { SettingsPage } from "./pages/Settings";
 
 export default function App() {
   return (
@@ -24,9 +28,41 @@ export default function App() {
           <Route
             path="/position"
             element={
-              //<RequireAuth>
-              <PositionPage />
-               //</RequireAuth>
+              <RequireAuth>
+                <PositionPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/global"
+            element={
+              <RequireAuth>
+                <GlobalTypePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/sub"
+            element={
+              <RequireAuth>
+                <SubTypePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/product"
+            element={
+              <RequireAuth>
+                <ProductPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <RequireAuth>
+                <SettingsPage />
+              </RequireAuth>
             }
           />
 

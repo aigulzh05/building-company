@@ -7,6 +7,7 @@ import Table from "react-bootstrap/Table";
 
 import UserService from "../service/user";
 import PositionService from "../service/position";
+import SubTypeService from "../service/subType";
 
 const FakeUsers = {
   content: [
@@ -36,7 +37,10 @@ const FakeUsers = {
   empty: false,
 };
 
-export function UserPage() {
+export function ProductPage() {
+  const [subTypes, setSubTypes] = useState([]);
+  const [subTypeId, setSubTypeId] = useState(0);
+
   const [users, setUsers] = useState(null);
   const [page, setPage] = useState(0);
   const [userId, setUserId] = useState(0);
@@ -59,8 +63,26 @@ export function UserPage() {
 
   useEffect(() => {
     getUsersFromServer(0);
+    getSubTypesFromServer();
   }, []);
-
+  const getSubTypesFromServer = () => {
+    setLoading(true);
+    SubTypeService.list()
+      .then((res) => {
+        console.log(res);
+        if (res.error) {
+          setMessage(res.error);
+          return;
+        }
+        setSubTypes(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
   const getUsersFromServer = (pageNumber) => {
     setLoading(true);
     UserService.list(pageNumber)
@@ -217,7 +239,7 @@ export function UserPage() {
   };
   return (
     <div className="p-2">
-      <h2 className="text-center">user page</h2>
+      <h2 className="text-center">product page</h2>
 
       {message}
       {users ? (
@@ -244,7 +266,7 @@ export function UserPage() {
           <tbody>
             {users?.content?.map((user, index) => (
               <tr key={user.id}>
-                <td>{index + 1 + page * 2}</td>
+                <td>{index + 1 + page * 3}</td>
                 <td>{user.username}</td>
                 <td>{user.firstName}</td>
                 <td>{user.lastName}</td>
@@ -346,7 +368,7 @@ export function UserPage() {
 
       {users?.totalPages ? (
         <Pagination style={{ justifyContent: "center" }}>
-          {Array.from(Array(users.totalPages).keys()).map((_, number) => (
+          {Array.from(Array(users.totalPages + 4).keys()).map((_, number) => (
             <Pagination.Item
               key={number}
               active={number === page}

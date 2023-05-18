@@ -1,6 +1,6 @@
 import api from "./http";
 
-function list(pageNo = 1, pageSize = 3) {
+function list(pageNo = 1, pageSize = 2) {
   return api.get("/api/user", {
     params: {
       pageNo,
@@ -46,4 +46,41 @@ function updatePhoto(userId, photo) {
   });
 }
 
-export default { update, list, save, detail, updatePassword, updatePhoto };
+function detailMe() {
+  return api.get(`/api/me`);
+}
+function updatePasswordMe(password) {
+  return api.put(`/api/settings/password`, {
+    password,
+  });
+}
+function updatePhotoMe(photo) {
+  var formData = new FormData();
+  formData.append("photo", photo);
+
+  return api.put(`/api/settings/photo`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+}
+function updateMe(firstName, lastName, phoneNumber, address) {
+  return api.put(`/api/settings/user`, {
+    firstName,
+    lastName,
+    phoneNumber,
+    address,
+  });
+}
+export default {
+  update,
+  list,
+  save,
+  detail,
+  updatePassword,
+  updatePhoto,
+  detailMe,
+  updatePasswordMe,
+  updatePhotoMe,
+  updateMe,
+};

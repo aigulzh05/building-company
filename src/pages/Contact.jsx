@@ -5,6 +5,8 @@ import Stack from "react-bootstrap/esm/Stack";
 import Form from "react-bootstrap/Form";
 import Accordion from "react-bootstrap/Accordion";
 import { useState } from "react";
+import { motion } from 'framer-motion';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 export function ContactPage() {
@@ -17,12 +19,35 @@ export function ContactPage() {
     // let password = formData.get("password").trim();
   }
   return (
+    <div
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)', // Черный фон с прозрачностью 0.8
+      }}
+    >
+      <div
+        className="background-image"
+        style={{
+          backgroundImage: `url("https://s0.rbk.ru/v6_top_pics/media/img/0/44/756603044119440.jpg")`,
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          opacity: 0.2, // Прозрачность фото (от 0 до 1)
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+        }}
+      />
     <div style={{ padding: "20px" }} >
-      <h3 style={{ textAlign: "center", paddingTop: "20px" }}>Вопросы</h3>
+      <h3 style={{ textAlign: "center", paddingTop: "20px" , color:"white"}}>Frequently asked questions</h3>
 
       <Accordion defaultActiveKey="0">
         <Accordion.Item eventKey="0">
-          <Accordion.Header>Accordion Item #1</Accordion.Header>
+          <Accordion.Header>Where can we buy a house?</Accordion.Header>
           <Accordion.Body>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
@@ -34,7 +59,7 @@ export function ContactPage() {
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="1">
-          <Accordion.Header>Accordion Item #2</Accordion.Header>
+          <Accordion.Header>What cities can you buy?</Accordion.Header>
           <Accordion.Body>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
@@ -46,7 +71,7 @@ export function ContactPage() {
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
-      <h3 style={{ textAlign: "center", paddingTop: "20px" }}>Контакты</h3>
+      <h3 style={{ textAlign: "center", paddingTop: "20px", color:"white" }}>Submit your application</h3>
 
       <Form style={{ paddingBlock: "20px" }} onSubmit={handleSubmit}>
         <Row>
@@ -82,30 +107,35 @@ export function ContactPage() {
             name="message"
             placeholder="Enter message text"
           />
-          <Form.Text className="text-muted">Enter your message</Form.Text>
+          <Form.Text className="text-muted" style={{ color: "white" }}>Enter your message</Form.Text>
         </Form.Group>
 
-        <Button variant="primary" disabled={loading} type="submit">
+        <Button variant="dark" disabled={loading} type="submit">
           Send
         </Button>
       </Form>
 
-      <Row>
-        <Col>
-          <Stack>
-            <p>O!: +996 555 123 123</p>
-            <p>Beeline: +996 555 123 123</p>
-            <p>Mega: +996 555 123 123</p>
-          </Stack>
-        </Col>
-        <Col>
-          <Stack>
-            <p> Email: contact.me@building.com</p>
-            <p> Email: contact.me@building.com</p>
-            <p> Email: contact.me@building.com</p>
-          </Stack>
-        </Col>
-      </Row>
+      <h3 style={{ textAlign: "center", paddingTop: "20px", color:"white" }}>Contact</h3>
+
+      <Row style={{ backgroundColor: "white" }}>
+  <Col>
+    <Stack>
+      <p>O!: +996 555 123 123</p>
+      <p>Beeline: +996 555 123 123</p>
+      <p>Mega: +996 555 123 123</p>
+    </Stack>
+  </Col>
+  <Col>
+    <Stack>
+      <p>Email: contact.me@building.com</p>
+      <p>Email: contact.me@building.com</p>
+      <p>Email: contact.me@building.com</p>
+    </Stack>
+  </Col>
+</Row>
+
     </div>
+    </div>
+
   );
 }

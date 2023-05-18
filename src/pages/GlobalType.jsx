@@ -4,56 +4,42 @@ import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/esm/Modal";
 import Form from "react-bootstrap/Form";
 
-import PositionService from "../service/position";
+import GlobalTypeService from "../service/globalType";
 
-const FakePostions = [
-  {
-    id: 1,
-    name: "admin Fake",
-    salary: 1500.0,
-  },
-  {
-    id: 2,
-    name: "manager",
-    salary: 1000.0,
-  },
-];
-export function PositionPage() {
-  const [positions, setPositions] = useState([]);
-  const [positionId, setPositionId] = useState(0);
+export function GlobalTypePage() {
+  const [globalTypes, setGlobalTypes] = useState([]);
+  const [globalTypeId, setGlobalTypeId] = useState(0);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [modalName, setModal] = useState("");
   const [name, setName] = useState("");
-  const [salary, setSalary] = useState(0);
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    getPositionsFromServer();
+    getGlobalTypesFromServer();
   }, []);
 
-  const getPositionsFromServer = () => {
+  const getGlobalTypesFromServer = () => {
     setLoading(true);
-    PositionService.list()
+    GlobalTypeService.list()
       .then((res) => {
         console.log(res);
         if (res.error) {
           setMessage(res.error);
           return;
         }
-        setPositions(res.data);
+        setGlobalTypes(res.data);
       })
       .catch((error) => {
         console.log(error);
-        setPositions(FakePostions);
       })
       .finally(() => {
         setLoading(false);
       });
   };
-  const updatePositionFromServer = () => {
+  const updateGlobalTypeFromServer = () => {
     setLoading(true);
-    PositionService.update(positionId, name, salary)
+    GlobalTypeService.update(globalTypeId, name)
       .then((res) => {
         console.log(res);
       })
@@ -61,14 +47,14 @@ export function PositionPage() {
         console.log(error);
       })
       .finally(() => {
-        getPositionsFromServer();
+        getGlobalTypesFromServer();
         setLoading(false);
       });
   };
-  const createPositionFromServer = () => {
+  const createGlobalTypeFromServer = () => {
     setLoading(true);
 
-    PositionService.save(name, salary)
+    GlobalTypeService.save(name)
       .then((res) => {
         console.log(res);
       })
@@ -76,13 +62,13 @@ export function PositionPage() {
         console.log(error);
       })
       .finally(() => {
-        getPositionsFromServer();
+        getGlobalTypesFromServer();
         setLoading(false);
       });
   };
-  const deletePositionFromServer = () => {
+  const deleteGlobalTypeFromServer = () => {
     setLoading(true);
-    PositionService.remove(positionId)
+    GlobalTypeService.remove(globalTypeId)
       .then((res) => {
         console.log(res);
       })
@@ -90,13 +76,13 @@ export function PositionPage() {
         console.log(error);
       })
       .finally(() => {
-        getPositionsFromServer();
+        getGlobalTypesFromServer();
         setLoading(false);
       });
   };
   const handleClose = () => {
     setShow(false);
-    // setPositionId(0);
+    // setGlobalTypeId(0);
     // setName('');
     // setSalary(0);
   };
@@ -105,23 +91,20 @@ export function PositionPage() {
     setModal(action);
     if (action === "create") {
       //create
-      setPositionId(0);
+      setGlobalTypeId(0);
       setName("");
-      setSalary(0);
     }
     if (action === "update") {
       //update
-      const thisPos = positions?.content?.filter((p) => p.id === id)[0];
-      setPositionId(thisPos.id);
-      setName(thisPos.name);
-      setSalary(thisPos.salary);
+      const thisGT = globalTypes?.content?.filter((p) => p.id === id)[0];
+      setGlobalTypeId(thisGT.id);
+      setName(thisGT.name);
     }
     if (action === "delete") {
       //delete
-      const thisPos = positions?.content?.filter((p) => p.id === id)[0];
-      setPositionId(thisPos.id);
-      setName(thisPos.name);
-      setSalary(thisPos.salary);
+      const thisGT = globalTypes?.content?.filter((p) => p.id === id)[0];
+      setGlobalTypeId(thisGT.id);
+      setName(thisGT.name);
     }
   };
 
@@ -129,20 +112,20 @@ export function PositionPage() {
     event.preventDefault();
     setShow(false);
     if (modalName === "create") {
-      createPositionFromServer();
+      createGlobalTypeFromServer();
     }
     if (modalName === "update") {
-      updatePositionFromServer();
+      updateGlobalTypeFromServer();
     }
     if (modalName === "delete") {
-      deletePositionFromServer();
+      deleteGlobalTypeFromServer();
     }
   }
   return (
     <div style={{ padding: "20px" }}>
-      <h2 style={{ textAlign: "center" }}>position page</h2>
+      <h2 style={{ textAlign: "center" }}>Gloabl Type page</h2>
       {message}
-      {positions?.content ? (
+      {globalTypes?.content ? (
         <>
           <Button variant="primary" onClick={() => handleShow(0, "create")}>
             Create new +
@@ -152,16 +135,14 @@ export function PositionPage() {
               <tr>
                 <th>#</th>
                 <th>Name</th>
-                <th>Salary</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {positions?.content?.map((pos, index) => (
+              {globalTypes?.content?.map((pos, index) => (
                 <tr key={pos.id}>
                   <td>{index + 1}</td>
                   <td>{pos.name}</td>
-                  <td>{pos.salary}</td>
                   <td>
                     <div className="d-flex flex-row justify-content-start gap-3">
                       <Button
@@ -188,17 +169,15 @@ export function PositionPage() {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Postion {modalName}</Modal.Title>
+          <Modal.Title>Global type {modalName}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {modalName === "delete" ? (
-            <p>
-              Are you sure? {name} - ${salary}
-            </p>
+            <p>Are you sure? {name}</p>
           ) : (
             <>
               <Form.Group className="mb-3" controlId="formBasicName">
-                <Form.Label>Position name</Form.Label>
+                <Form.Label>GlobalType name</Form.Label>
                 <Form.Control
                   type="text"
                   name="name"
@@ -209,22 +188,8 @@ export function PositionPage() {
                   placeholder="Enter position"
                 />
                 <Form.Text className="text-muted">
-                  Enter your position name.
+                  Enter global type name.
                 </Form.Text>
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formBasicSalary">
-                <Form.Label>Salary</Form.Label>
-                <Form.Control
-                  type="number"
-                  name="salary"
-                  value={salary}
-                  onChange={(e) => {
-                    setSalary(parseInt(e.target.value));
-                  }}
-                  placeholder="Enter salary"
-                />
-                <Form.Text className="text-muted">Enter your salary</Form.Text>
               </Form.Group>
             </>
           )}

@@ -37,32 +37,29 @@ export function AboutPage() {
           zIndex: 1,
         }}
       >
-        <h1 className="mb-4 text-white">О нас</h1>
+        <h1 className="mb-4 text-white">About Us</h1>
         <div className="row">
           <div className="col-lg-6">
             <div className="card bg-dark">
               <div className="card-body">
-                <h5 className="card-title text-white">Наша команда</h5>
+                <h5 className="card-title text-white">Our team</h5>
                 <p className="card-text text-white">
-                  Мы являемся командой профессионалов в строительной отрасли с многолетним опытом работы.
-                  Наша цель - создавать надежные и качественные строительные проекты, соответствующие потребностям наших клиентов.
-                </p>
+                We are a team of professionals in the construction industry with many years of experience.
+                Our goal is to create reliable and high-quality construction projects that meet the needs of our customers.</p>
               </div>
             </div>
             <div className="card bg-dark mt-3">
               <div className="card-body">
-                <h5 className="card-title text-white">Наши услуги</h5>
+                <h5 className="card-title text-white">Our services</h5>
                 <p className="card-text text-white">
-                  Мы предлагаем широкий спектр услуг, включая строительство жилых и коммерческих объектов, ремонтные работы,
-                  архитектурное проектирование и многое другое. Мы гарантируем высокое качество и внимание к деталям в каждом проекте.
-                </p>
+                We offer a wide range of services, including residential and commercial construction, renovations,
+                architectural design and much more. We guarantee high quality and attention to detail in every project.</p>
               </div>
             </div>
           </div>
         </div>
         <p className="mt-4 text-white">
-          Свяжитесь с нами, чтобы обсудить ваш следующий проект и превратить ваши мечты в реальность!
-        </p>
+        Contact us to discuss your next project and turn your dreams into reality!        </p>
         <p className="text-white">С уважением,</p>
         <p className="text-white">Команда вашей строительной компании</p>
       </motion.div>

@@ -9,6 +9,7 @@ import Stack from "react-bootstrap/Stack";
 
 import { useAuth } from "../service/authProvider";
 import AuthService from "../service/auth";
+import UserService from "../service/user";
 import { useState } from "react";
 export function LoginPage() {
   let navigate = useNavigate();
@@ -36,20 +37,9 @@ export function LoginPage() {
     AuthService.login(username, password)
       .then((res) => {
         if (res.data.accessToken && res.data.refreshToken) {
-          const user = {
-            name: "Aigul",
-          };
           localStorage.setItem("token", res.data.accessToken);
           localStorage.setItem("refresh-token", res.data.refreshToken);
-          auth.signin(user, () => {
-            // Send them back to the page they tried to visit when they were
-            // redirected to the login page. Use { replace: true } so we don't create
-            // another entry in the history stack for the login page.  This means that
-            // when they get to the protected page and click the back button, they
-            // won't end up back on the login page, which is also really nice for the
-            // user experience.
-            navigate(from, { replace: true });
-          });
+          getMeFromServer();
         }
         if (data.error) {
           setMessage(data.error);
@@ -63,8 +53,27 @@ export function LoginPage() {
       });
   }
 
+  const getMeFromServer = () => {
+    UserService.detailMe()
+      .then((res) => {
+        if (res.data)
+          auth.signin(res.data, () => {
+            // Send them back to the page they tried to visit when they were
+            // redirected to the login page. Use { replace: true } so we don't create
+            // another entry in the history stack for the login page.  This means that
+            // when they get to the protected page and click the back button, they
+            // won't end up back on the login page, which is also really nice for the
+            // user experience.
+            navigate(from, { replace: true });
+          });
+      })
+      .catch((error) => {
+        console.log({ error });
+      });
+  };
+
   return (
-    <Container >
+    <Container>
       <Stack gap={3} style={{ paddingTop: "50px" }}>
         <Alert key={"warning"} variant={"warning"}>
           You must log in to view the page at {from}

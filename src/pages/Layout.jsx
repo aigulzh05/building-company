@@ -39,20 +39,38 @@ export function Layout() {
               <Nav.Link as={Link} to="/contact">
                 CONTACT
               </Nav.Link>
-              <NavDropdown title="Admin" id="collasible-nav-dropdown">
-                <NavDropdown.Item as={Link} to="/user">
-                  User
-                </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/position">
-                  Position
-                </NavDropdown.Item>
-              </NavDropdown>
+              {auth.user ? (
+                <Fragment>
+                  <Nav.Link as={Link} to="/settings">
+                    Settings
+                  </Nav.Link>
+                  {auth.user.position.name === "admin" ? (
+                    <NavDropdown title="Admin" id="collasible-nav-dropdown">
+                      <NavDropdown.Item as={Link} to="/user">
+                        User
+                      </NavDropdown.Item>
+                      <NavDropdown.Item as={Link} to="/position">
+                        Position
+                      </NavDropdown.Item>
+                      <NavDropdown.Item as={Link} to="/global">
+                        Global type
+                      </NavDropdown.Item>
+                      <NavDropdown.Item as={Link} to="/sub">
+                        Sub type
+                      </NavDropdown.Item>
+                      <NavDropdown.Item as={Link} to="/product">
+                        Product
+                      </NavDropdown.Item>
+                    </NavDropdown>
+                  ) : null}
+                </Fragment>
+              ) : null}
             </Nav>
             <Nav>
               {auth.user ? (
                 <Fragment>
                   <Nav.Link eventKey={2} href="#">
-                    {auth.user.name}
+                    {auth.user.firstName}
                   </Nav.Link>
                   <Nav.Link onClick={() => logout()}>Logout</Nav.Link>
                 </Fragment>
