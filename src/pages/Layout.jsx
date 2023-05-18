@@ -68,7 +68,9 @@ export function Layout() {
                   <Nav.Link onClick={() => logout()}>Logout</Nav.Link>
                 </Fragment>
               ) : (
-                <Nav.Link href="/login">Login</Nav.Link>
+                <Nav.Link as={Link} to="/login">
+                  Login
+                </Nav.Link>
               )}
             </Nav>
           </Navbar.Collapse>
