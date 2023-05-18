@@ -39,25 +39,14 @@ export function Layout() {
               <Nav.Link as={Link} to="/contact">
                 CONTACT
               </Nav.Link>
-              <Nav.Link as={Link} to="/user">
-                User
-              </Nav.Link>
-              <Nav.Link as={Link} to="/position">
-                Position
-              </Nav.Link>
-              {/* <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Another action
+              <NavDropdown title="Admin" id="collasible-nav-dropdown">
+                <NavDropdown.Item as={Link} to="/user">
+                  User
                 </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">
-                  Something
+                <NavDropdown.Item as={Link} to="/position">
+                  Position
                 </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">
-                  Separated link
-                </NavDropdown.Item>
-              </NavDropdown> */}
+              </NavDropdown>
             </Nav>
             <Nav>
               {auth.user ? (
