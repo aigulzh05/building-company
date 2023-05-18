@@ -1,21 +1,21 @@
 import api from "./http";
 
 function list() {
-  return api.get("/position");
+  return api.get("/api/position");
 }
 //CRUD
 function save(name, salary) {
-  return api.post("/position", { name, salary });
+  return api.post("/api/position", { name, salary });
 }
 function detail(id) {
-  return api.get(`/position/${id}`);
+  return api.get(`/api/position/${id}`);
 }
 function update(id, name, salary) {
-  return api.put(`/position/${id}?name=${name}
+  return api.put(`/api/position/${id}?name=${name}
   &salary=${salary}`);
 }
 function remove(id) {
-  return api.delete(`/position/${id}`);
+  return api.delete(`/api/position/${id}`);
 }
 
 export default { update, list, save, remove, detail };

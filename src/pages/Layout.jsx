@@ -39,8 +39,8 @@ export function Layout() {
               <Nav.Link as={Link} to="/contact">
                 CONTACT
               </Nav.Link>
-              <Nav.Link as={Link} to="/edit">
-                EDIT
+              <Nav.Link as={Link} to="/user">
+                User
               </Nav.Link>
               <Nav.Link as={Link} to="/position">
                 Position

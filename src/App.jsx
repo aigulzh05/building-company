@@ -5,7 +5,7 @@ import { AuthProvider, RequireAuth } from "./service/authProvider";
 import { Layout } from "./pages/Layout";
 import { LoginPage } from "./pages/Login";
 import { HomePage } from "./pages/Home";
-import { EditPage } from "./pages/Edit";
+import { UserPage } from "./pages/User";
 import { AboutPage } from "./pages/About";
 import { BuildingsPage } from "./pages/Buildings";
 import { ContactPage } from "./pages/Contact";
@@ -31,10 +31,10 @@ export default function App() {
           />
 
           <Route
-            path="/edit"
+            path="/user"
             element={
               <RequireAuth>
-                <EditPage />
+                <UserPage />
               </RequireAuth>
             }
           />

@@ -1,33 +1,49 @@
 import api from "./http";
 
-function list() {
-  return api.get("/position");
+function list(pageNo = 1, pageSize = 3) {
+  return api.get("/api/user", {
+    params: {
+      pageNo,
+      pageSize,
+    },
+  });
 }
 //CRUD
 function save(positionId, username, password) {
-  return api.post(
-    `/api/user?positionId=${positionId}&username=${username}&password=${password}`
-  );
+  return api.post(`/api/user`, {
+    positionId,
+    username,
+    password,
+  });
 }
 function detail(userId) {
   return api.get(`/api/user/${userId}`);
 }
-function update(id, firstName, lastName, photo, phoneNumber, address) {
+function update(id, firstName, lastName, phoneNumber, address) {
+  return api.put(`/api/user`, {
+    id,
+    firstName,
+    lastName,
+    phoneNumber,
+    address,
+  });
+}
+function updatePassword(userId, password) {
+  return api.put(`/api/user/password`, {
+    userId,
+    password,
+  });
+}
+function updatePhoto(userId, photo) {
   var formData = new FormData();
   formData.append("photo", photo);
-  formData.append("firstName", firstName);
-  formData.append("lastName", lastName);
-  formData.append("phoneNumber", phoneNumber);
-  formData.append("address", address);
+  formData.append("userId", userId);
 
-  axios.put(`/api/user/${id}`, formData, {
+  return api.put(`/api/user/photo`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
 }
-function remove(id) {
-  return api.delete(`/api/user/${id}`);
-}
 
-export { update, list, save, remove, detail };
+export default { update, list, save, detail, updatePassword, updatePhoto };

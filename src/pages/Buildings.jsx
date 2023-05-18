@@ -6,6 +6,7 @@ import Col from "react-bootstrap/esm/Col";
 import Row from "react-bootstrap/esm/Row";
 import Stack from "react-bootstrap/esm/Stack";
 import Form from "react-bootstrap/Form";
+import { motion } from 'framer-motion';
 
 const cards = [
   {
@@ -75,6 +76,13 @@ export function BuildingsPage() {
 
   return (
     <div style={{ padding: "20px" }}>
+      <motion.div
+    initial={{ opacity: 0, y: 100 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -100 }}
+    transition={{ duration: 0.5 }}
+    className="container py-5"
+  >
       <h2 style={{ textAlign: "center" }}>Buildings page</h2>
       <div
         style={{
@@ -101,6 +109,7 @@ export function BuildingsPage() {
           </Card>
         ))}
       </div>
+      </motion.div>
      
      
   

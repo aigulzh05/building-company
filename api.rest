@@ -34,10 +34,15 @@ Content-Type: application/json
 ####################################################################################
 ####################################################################################
 ####################################################################################
+# user list
+###
+GET  http://3.34.2.208:5000/api/user?pageNo=0&pageSize=3 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDM2ODMyOSwiZXhwIjoxNjg0MzcwMTI5fQ.SKn1WQ5eiLqqbsKym2V0HKncJYCnB5xstf5D-PLuOrs
+Content-Type: application/json
 # user
 ###
 GET  http://3.34.2.208:5000/api/user/1 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDA4MzQwMCwiZXhwIjoxNjg0MDg1MjAwfQ.f0O6r-m_ErkHqOfzU-5BXfXULK3_tQFKw2kmUsHhW74
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY4NDM2ODMyOSwiZXhwIjoxNjg0MzcwMTI5fQ.SKn1WQ5eiLqqbsKym2V0HKncJYCnB5xstf5D-PLuOrs
 Content-Type: application/json
 
 # update user
