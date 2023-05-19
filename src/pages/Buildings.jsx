@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 const cards = [
   {
     image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Empire_State_Building_86th_floor.jpg/273px-Empire_State_Building_86th_floor.jpg",
+      "https://www.alfaplan.ru/upload/information_system_33/1/5/3/item_1534/information_items_property_182181.webp",
     title: "Card Title",
     text: `Some quick example text to build on the card title and make up the
     bulk of the card's content.`,
@@ -20,7 +20,7 @@ const cards = [
   },
   {
     image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Empire_State_Building_86th_floor.jpg/273px-Empire_State_Building_86th_floor.jpg",
+      "https://img06.rl0.ru/afisha/e780x-i/daily.afisha.ru/uploads/images/b/85/b85b08e265dc278012342aa73358873d.jpg",
     title: "Card Title",
     text: `Some quick example text to build on the card title and make up the
     bulk of the card's content.`,
@@ -29,7 +29,7 @@ const cards = [
   },
   {
     image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Empire_State_Building_86th_floor.jpg/273px-Empire_State_Building_86th_floor.jpg",
+      "https://moscowseasons.com/uploads/2019/05/29/5cee47a50e8e6.jpeg",
     title: "Card Title",
     text: `Some quick example text to build on the card title and make up the
     bulk of the card's content.`,
@@ -38,7 +38,7 @@ const cards = [
   },
   {
     image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Empire_State_Building_86th_floor.jpg/273px-Empire_State_Building_86th_floor.jpg",
+      "https://www.alfaplan.ru/upload/information_system_33/1/8/4/item_1846/information_items_property_254476.webp",
     title: "Card Title",
     text: `Some quick example text to build on the card title and make up the
     bulk of the card's content.`,
@@ -47,7 +47,7 @@ const cards = [
   },
   {
     image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Empire_State_Building_86th_floor.jpg/273px-Empire_State_Building_86th_floor.jpg",
+      "https://vash-vybor.info/wp-content/uploads/2017/02/dom-v-stile-haj-tek-13-820x592.jpg",
     title: "Card Title",
     text: `Some quick example text to build on the card title and make up the
     bulk of the card's content.`,
@@ -56,7 +56,7 @@ const cards = [
   },
   {
     image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Empire_State_Building_86th_floor.jpg/273px-Empire_State_Building_86th_floor.jpg",
+      "https://news.store.rambler.ru/img/2a36c9870d2741f9a5ad9db4951a42b6?img-1-resize=width%3A1280%2Cheight%3A720%2Cfit%3Acover&img-format=auto",
     title: "Card Title",
     text: `Some quick example text to build on the card title and make up the
     bulk of the card's content.`,
