@@ -9,10 +9,10 @@ function list(pageNo = 1, pageSize = 3) {
   });
 }
 //CRUD
-function save(name, quantity, price, subTypeId, image) {
+function save(name, quantity, price, subTypeId, img) {
   var formData = new FormData();
   formData.append("name", name);
-  formData.append("img", image);
+  formData.append("img", img);
   formData.append("quantity", quantity);
   formData.append("price", price);
   formData.append("subTypeId", subTypeId);

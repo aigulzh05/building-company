@@ -8,7 +8,8 @@ import Stack from "react-bootstrap/esm/Stack";
 import { motion } from "framer-motion";
 import Form from "react-bootstrap/Form";
 
-import BuildingService from "../service/building";
+import ApartmentService from "../service/apartment";
+
 
 const cards = [
   {
@@ -65,29 +66,30 @@ const cards = [
     actionText: "Go somewhere",
   },
 ];
-export function BuildingsPage() {
+
+export function ApartmentsPage() {
   const [loading, setLoading] = useState(false);
-  const [buildings, setBuildings] = useState([]);
+  const [apartments, setApartments] = useState([]);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    getBuildingsFromServer();
+    getApartmentsFromServer();
   }, []);
 
-  const getBuildingsFromServer = () => {
+  const getApartmentsFromServer = () => {
     setLoading(true);
-    BuildingService.list()
+    ApartmentService.list()
       .then((res) => {
         console.log(res);
         if (res.error) {
           setMessage(res.error);
           return;
         }
-        setBuildings(res.data);
+        setApartments(res.data);
       })
       .catch((error) => {
         console.log(error);
-        setBuildings();
+        setApartments();
       })
       .finally(() => {
         setLoading(false);
@@ -103,9 +105,9 @@ export function BuildingsPage() {
         transition={{ duration: 0.5 }}
         className="container py-5"
       >
-        <h2 style={{ textAlign: "center" }}>Buildings page</h2>
+        <h2 style={{ textAlign: "center" }}>Apartments page</h2>
         {message}
-        {buildings ? (
+        {apartments ? (
           <div
             style={{
               display: "flex",
@@ -116,7 +118,7 @@ export function BuildingsPage() {
               paddingBlock: "20px",
             }}
           >
-            {buildings?.content?.map((card, index) => (
+            {apartments?.content?.map((card, index) => (
               <Card style={{ width: "18rem" }}>
                 <Card.Img variant="top" src={card.imgUrl} />
                 <Card.Body>

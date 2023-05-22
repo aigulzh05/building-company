@@ -34,7 +34,10 @@ export function Layout() {
                 ABOUT
               </Nav.Link>
               <Nav.Link as={Link} to="/build">
-                OUR BUILDINGS
+                BUILDINGS
+              </Nav.Link>
+              <Nav.Link as={Link} to="/apartment">
+                APARTMENT
               </Nav.Link>
               <Nav.Link as={Link} to="/contact">
                 CONTACT
@@ -48,9 +51,15 @@ export function Layout() {
                     <NavDropdown title="Admin" id="collasible-nav-dropdown">
                       <NavDropdown.Item as={Link} to="/user">
                         User
-                      </NavDropdown.Item>
+                      </NavDropdown.Item>                 
                       <NavDropdown.Item as={Link} to="/position">
                         Position
+                      </NavDropdown.Item>
+                      <NavDropdown.Item as={Link} to="/addBuild">
+                        Add Building
+                      </NavDropdown.Item>
+                      <NavDropdown.Item as={Link} to="/addApartment">
+                        Add Apartment
                       </NavDropdown.Item>
                       <NavDropdown.Item as={Link} to="/global">
                         Global type

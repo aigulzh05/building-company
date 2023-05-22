@@ -8,12 +8,16 @@ import { HomePage } from "./pages/Home";
 import { UserPage } from "./pages/User";
 import { AboutPage } from "./pages/About";
 import { BuildingsPage } from "./pages/Buildings";
+import { ApartmentsPage } from "./pages/Apartment";
 import { ContactPage } from "./pages/Contact";
 import { PositionPage } from "./pages/Position";
 import { GlobalTypePage } from "./pages/GlobalType";
 import { SubTypePage } from "./pages/SubType";
 import { ProductPage } from "./pages/Product";
 import { SettingsPage } from "./pages/Settings";
+import { AddBuildingPage } from "./pages/AddBuilding";
+import { AddApartmentPage } from "./pages/AddApartment";
+
 
 export default function App() {
   return (
@@ -24,12 +28,29 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/build" element={<BuildingsPage />} />
+          <Route path="/apartment" element={<ApartmentsPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route
             path="/position"
             element={
               <RequireAuth>
                 <PositionPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/addBuild"
+            element={
+              <RequireAuth>
+                <AddBuildingPage />
+              </RequireAuth>
+            }
+          />
+           <Route
+            path="/addApartment"
+            element={
+              <RequireAuth>
+                <AddApartmentPage />
               </RequireAuth>
             }
           />

@@ -11,7 +11,7 @@ function list(pageNo = 1, pageSize = 10) {
 //CRUD
 function save(name, globalTypeId) {
   return api.post(`/api/sub-type`, {
-    id: globalTypeId,
+    globalTypeId,
     name,
   });
 }
