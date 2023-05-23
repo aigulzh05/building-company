@@ -48,7 +48,7 @@ export function UserPage() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [show, setShow] = useState(false);
-
+ 
   const [positions, setPositions] = useState([]);
   const [positionId, setPositionId] = useState(0);
   const [username, setUsername] = useState("");

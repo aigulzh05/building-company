@@ -1,7 +1,7 @@
 import api from "./http";
 
-function list(pageNo = 1, pageSize = 10) {
-  return api.get("/api/puchase-request", {
+function list(pageNo = 0, pageSize = 10) {
+  return api.get("/api/purchase-request", {
     params: {
       pageNo,
       pageSize,

@@ -10,7 +10,6 @@ import Form from "react-bootstrap/Form";
 
 import ApartmentService from "../service/apartment";
 
-
 const cards = [
   {
     image:
@@ -119,19 +118,25 @@ export function ApartmentsPage() {
             }}
           >
             {apartments?.content?.map((card, index) => (
-              <Card style={{ width: "18rem" }}>
+              <Card style={{ width: "18rem" }} key={index}>
                 <Card.Img variant="top" src={card.imgUrl} />
                 <Card.Body>
                   <Card.Title>{card.name}</Card.Title>
                   <Card.Text>
-                    <p>{card.description}</p>
+                    <p>{card.building.name}</p>
                     <p>
-                      Fl: {card.numberOfFloors} Ap: {card.numberOfApartments}
+                      area: {card.area}
+                      <br />
+                      price: {card.price}
+                      <br />
+                      pricePerArea: {card.pricePerArea}
+                      <br />
+                      roomNumber: {card.roomNumber}
                     </p>
                   </Card.Text>
                   <a href="#" target={"_blank"}>
-                    <Button variant={index == 0 ? "primary" : "secondary"}>
-                      {card.state}
+                    <Button variant={"secondary"}>
+                      {card.status}
                     </Button>
                   </a>
                 </Card.Body>

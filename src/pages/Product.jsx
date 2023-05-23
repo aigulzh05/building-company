@@ -5,76 +5,96 @@ import Form from "react-bootstrap/Form";
 import Pagination from "react-bootstrap/Pagination";
 import Table from "react-bootstrap/Table";
 
-import UserService from "../service/user";
 import PositionService from "../service/position";
-import SubTypeService from "../service/subType";
+import GlobalTypeService from "../service/globalType";
+import ProductService from "../service/product";
+import { Cascader } from "antd";
+import { Modal as AntModal } from "antd";
 
-const FakeUsers = {
-  content: [
-    {
-      id: 1,
-      username: "username",
-      firstName: "Bekzhan",
-      lastName: "Satiev",
-      photoUrl:
-        "https://res.cloudinary.com/dks4go0cw/image/upload/v1684339473/cdjwh4pj2uzwiqxnm9a2.png",
-      phoneNumber: "56789",
-      address: "California",
-      position: {
-        id: 1,
-        name: "admin",
-        salary: 1500.0,
+const options = [
+  {
+    value: "zhejiang",
+    label: "Zhejiang",
+    children: [
+      {
+        value: "hangzhou",
+        label: "Hangzhou",
+        children: [
+          {
+            value: "xihu",
+            label: "West Lake",
+          },
+        ],
       },
-    },
-  ],
-  totalPages: 1,
-  totalElements: 1,
-  last: true,
-  size: 3,
-  number: 0,
-  numberOfElements: 1,
-  first: true,
-  empty: false,
-};
+    ],
+  },
+  {
+    value: "jiangsu",
+    label: "Jiangsu",
+    children: [
+      {
+        value: "nanjing",
+        label: "Nanjing",
+        children: [
+          {
+            value: "zhonghuamen",
+            label: "Zhong Hua Men",
+          },
+        ],
+      },
+    ],
+  },
+];
 
 export function ProductPage() {
-  const [subTypes, setSubTypes] = useState([]);
+  const [globalTypes, setGlobalTypes] = useState(null);
+  const [globalTypesSelect, setGlobalTypesSelect] = useState([]);
+  const [globalTypeId, setGlobalTypeId] = useState(0);
   const [subTypeId, setSubTypeId] = useState(0);
+  const [productId, setProductId] = useState(0);
+  const [products, setProducts] = useState(null);
 
-  const [users, setUsers] = useState(null);
   const [page, setPage] = useState(0);
-  const [userId, setUserId] = useState(0);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [modalName, setModal] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
   const [show, setShow] = useState(false);
+  const [modalName, setModal] = useState("");
 
-  const [positions, setPositions] = useState([]);
-  const [positionId, setPositionId] = useState(0);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const [photoUrl, setPhotoUrl] = useState("");
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [photo, setPhoto] = useState(null);
+  const [photoUrl, setPhotoUrl] = useState("");
 
   useEffect(() => {
-    getUsersFromServer(0);
-    getSubTypesFromServer();
+    getProductsFromServer(0);
+    getGlobalTypesFromServer();
   }, []);
-  const getSubTypesFromServer = () => {
+  const getGlobalTypesFromServer = () => {
     setLoading(true);
-    SubTypeService.list()
+    GlobalTypeService.list()
       .then((res) => {
         console.log(res);
         if (res.error) {
           setMessage(res.error);
           return;
         }
-        setSubTypes(res.data);
+        setGlobalTypes(res.data);
+        let dd = [];
+        res.data.content?.forEach((element) => {
+          if (element.subTypeList.length) {
+            dd.push({
+              value: element.id,
+              label: element.name,
+              children: element.subTypeList.map((el) => {
+                return { value: el.id, label: el.name };
+              }),
+            });
+          } else {
+            // dd.push({ value: element.id, label: element.name });
+          }
+        });
+        setGlobalTypesSelect(dd);
       })
       .catch((error) => {
         console.log(error);
@@ -83,42 +103,29 @@ export function ProductPage() {
         setLoading(false);
       });
   };
-  const getUsersFromServer = (pageNumber) => {
+  const getProductsFromServer = (pageNumber) => {
     setLoading(true);
-    UserService.list(pageNumber)
+    ProductService.list(pageNumber)
       .then((res) => {
         console.log({ res });
         if (res.error) {
           setMessage(res.error);
           return;
         }
-        setUsers(res.data);
+        setProducts(res.data);
         setPage(pageNumber);
       })
       .catch((error) => {
         console.log({ error });
-        setUsers(FakeUsers);
       })
       .finally(() => {
         setLoading(false);
       });
-  };
-  const getPositionsFromServer = () => {
-    PositionService.list()
-      .then((res) => {
-        console.log(res);
-        setPositions(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        setPositions(FakePostions);
-      })
-      .finally(() => {});
   };
 
-  const updateUserFromServer = () => {
+  const updateProductFromServer = () => {
     setLoading(true);
-    UserService.update(userId, firstName, lastName, phoneNumber, address)
+    ProductService.update(productId, name, quantity, price, subTypeId)
       .then((res) => {
         console.log(res);
       })
@@ -126,14 +133,14 @@ export function ProductPage() {
         console.log(error);
       })
       .finally(() => {
-        getUsersFromServer(page);
+        getProductsFromServer(page);
         setLoading(false);
       });
   };
-  const createUserFromServer = () => {
+  const createProductFromServer = () => {
     setLoading(true);
 
-    UserService.save(positionId, username, password)
+    ProductService.save(name, quantity, price, subTypeId, photo)
       .then((res) => {
         console.log(res);
       })
@@ -141,13 +148,13 @@ export function ProductPage() {
         console.log(error);
       })
       .finally(() => {
-        getUsersFromServer(0);
+        getProductsFromServer(0);
         setLoading(false);
       });
   };
-  const updatePasswordFromServer = () => {
+  const deleteProductFromServer = () => {
     setLoading(true);
-    UserService.updatePassword(userId, password)
+    ProductService.remove(productId)
       .then((res) => {
         console.log(res);
       })
@@ -155,12 +162,12 @@ export function ProductPage() {
         console.log(error);
       })
       .finally(() => {
-        getUsersFromServer(page);
+        getProductsFromServer(page);
         setLoading(false);
       });
   };
   const updatePhotoFromServer = () => {
-    UserService.updatePhoto(userId, photo)
+    ProductService.updatePhoto(productId, photo)
       .then((res) => {
         console.log(res);
       })
@@ -168,7 +175,7 @@ export function ProductPage() {
         console.log(error);
       })
       .finally(() => {
-        getUsersFromServer(page);
+        getProductsFromServer(page);
       });
   };
   const handleClose = () => {
@@ -182,38 +189,48 @@ export function ProductPage() {
     setTimeout(() => setShow(true), 300);
     if (action === "create") {
       //create
-      setUserId(0);
-      setUsername("");
-      setPassword("");
-      setPositionId(0);
-      if (positions.length === 0) {
-        getPositionsFromServer();
-      }
+      setGlobalTypeId(0);
+      setSubTypeId(0);
+      setProductId(0);
+      setPrice(0);
+      setQuantity(0);
+      setName("");
     }
     if (action === "update") {
       //update
-      const thisUser = users?.content?.filter((u) => u.id === id)[0];
-      setUserId(thisUser.id);
-      setFirstName(thisUser.firstName);
-      setLastName(thisUser.lastName);
-      setPhoneNumber(thisUser.phoneNumber);
-      setAddress(thisUser.address);
-      if (positions.length === 0) {
-        getPositionsFromServer();
-      }
+      const thisProd = products?.content?.filter((u) => u.id === id)[0];
+      setGlobalTypeId(thisProd.globalTypeId);
+      setSubTypeId(thisProd.subTypeId);
+      setProductId(thisProd.id);
+      setPrice(thisProd.price);
+      setQuantity(thisProd.quantity);
+      setName(thisProd.name);
+      setPhotoUrl(thisProd.imgUrl);
+      setPhoto(null);
     }
     if (action === "photo") {
       //photo
-      const thisUser = users?.content?.filter((u) => u.id === id)[0];
-      console.log({ thisUser });
-      setPhotoUrl(thisUser.photoUrl);
-      setUserId(thisUser.id);
+      const thisProd = products?.content?.filter((u) => u.id === id)[0];
+      setGlobalTypeId(thisProd.globalTypeId);
+      setSubTypeId(thisProd.subTypeId);
+      setProductId(thisProd.id);
+      setPrice(thisProd.price);
+      setQuantity(thisProd.quantity);
+      setName(thisProd.name);
+      setPhotoUrl(thisProd.imgUrl);
       setPhoto(null);
     }
-    if (action === "password") {
-      //password
-      setUserId(id);
-      setPassword("");
+    if (action === "delete") {
+      //delete
+      const thisProd = products?.content?.filter((u) => u.id === id)[0];
+      setGlobalTypeId(thisProd.globalTypeId);
+      setSubTypeId(thisProd.subTypeId);
+      setProductId(thisProd.id);
+      setPrice(thisProd.price);
+      setQuantity(thisProd.quantity);
+      setName(thisProd.name);
+      setPhotoUrl(thisProd.imgUrl);
+      setPhoto(null);
     }
   };
 
@@ -221,58 +238,58 @@ export function ProductPage() {
     event.preventDefault();
     setShow(false);
     if (modalName === "create") {
-      createUserFromServer();
+      createProductFromServer();
     }
     if (modalName === "update") {
-      updateUserFromServer();
+      updateProductFromServer();
     }
     if (modalName === "photo") {
       updatePhotoFromServer();
     }
-    if (modalName === "password") {
-      updatePasswordFromServer();
+    if (modalName === "delete") {
+      deleteProductFromServer();
     }
   }
 
   const handlePage = (pageNumber) => {
-    getUsersFromServer(pageNumber);
+    getProductsFromServer(pageNumber);
   };
   return (
     <div className="p-2">
       <h2 className="text-center">product page</h2>
 
       {message}
-      {users ? (
+      {products ? (
         <Button
           className="my-2"
           variant="primary"
           onClick={() => handleShow(0, "create")}
         >
-          Add user
+          Add
         </Button>
       ) : null}
-      {users ? (
+      {products ? (
         <Table striped bordered hover>
           <thead>
             <tr>
               <th>#</th>
-              <th>Username</th>
-              <th>First Name</th>
-              <th>Last Name</th>
+              <th>name</th>
+              <th>price</th>
+              <th>quantity</th>
               <th>Photo</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {users?.content?.map((user, index) => (
-              <tr key={user.id}>
+            {products?.content?.map((product, index) => (
+              <tr key={product.id}>
                 <td>{index + 1 + page * 3}</td>
-                <td>{user.username}</td>
-                <td>{user.firstName}</td>
-                <td>{user.lastName}</td>
+                <td>{product.name}</td>
+                <td>{product.price}</td>
+                <td>{product.quantity}</td>
                 <td>
-                  {user.photoUrl ? (
-                    <img src={user.photoUrl} alt="Avatar" className="avatar" />
+                  {product.imgUrl ? (
+                    <img src={product.imgUrl} alt="Avatar" className="avatar" />
                   ) : (
                     <img
                       src={"https://www.w3schools.com/w3images/avatar2.png"}
@@ -284,25 +301,25 @@ export function ProductPage() {
                 <td>
                   <div className="d-flex flex-row justify-content-start gap-3">
                     <Button
-                      onClick={() => handleShow(user.id, "update")}
+                      onClick={() => handleShow(product.id, "update")}
                       variant="outline-primary"
                       size="sm"
                     >
                       Edit
                     </Button>
                     <Button
-                      onClick={() => handleShow(user.id, "photo")}
+                      onClick={() => handleShow(product.id, "photo")}
                       variant="outline-secondary"
                       size="sm"
                     >
                       Photo
                     </Button>
                     <Button
-                      onClick={() => handleShow(user.id, "password")}
-                      variant="outline-success"
+                      onClick={() => handleShow(product.id, "delete")}
+                      variant="outline-danger"
                       size="sm"
                     >
-                      Password
+                      Delete
                     </Button>
                   </div>
                 </td>
@@ -311,47 +328,84 @@ export function ProductPage() {
           </tbody>
         </Table>
       ) : null}
-      {modalName === "create" ? (
+
+      {modalName === "create" && globalTypesSelect.length ? (
         <CreateModal
           show={show}
           handleClose={handleClose}
           handleSave={handleSave}
           modalName={modalName}
-          positions={positions}
-          positionId={positionId}
-          username={username}
-          password={password}
-          setPositionId={setPositionId}
-          setUsername={setUsername}
-          setPassword={setPassword}
+          globalTypes={globalTypes}
+          globalTypeId={globalTypeId}
+          subTypeId={subTypeId}
+          productId={productId}
+          products={products}
+          name={name}
+          price={price}
+          quantity={quantity}
+          photo={photo}
+          photoUrl={photoUrl}
+          setGlobalTypeId={setGlobalTypeId}
+          setSubTypeId={setSubTypeId}
+          setProductId={setProductId}
+          setPrice={setPrice}
+          setQuantity={setQuantity}
+          setName={setName}
+          setPhoto={setPhoto}
+          globalTypesSelect={globalTypesSelect}
         />
       ) : null}
 
-      {modalName === "update" ? (
+      {modalName === "update" && globalTypesSelect.length ? (
         <UpdateModal
           show={show}
           handleClose={handleClose}
           handleSave={handleSave}
           modalName={modalName}
-          firstName={firstName}
-          lastName={lastName}
-          phoneNumber={phoneNumber}
-          address={address}
-          setFirstName={setFirstName}
-          setLastName={setLastName}
-          setPhoneNumber={setPhoneNumber}
-          setAddress={setAddress}
+          globalTypes={globalTypes}
+          globalTypeId={globalTypeId}
+          subTypeId={subTypeId}
+          productId={productId}
+          products={products}
+          name={name}
+          price={price}
+          quantity={quantity}
+          photo={photo}
+          photoUrl={photoUrl}
+          setGlobalTypeId={setGlobalTypeId}
+          setSubTypeId={setSubTypeId}
+          setProductId={setProductId}
+          setPrice={setPrice}
+          setQuantity={setQuantity}
+          setName={setName}
+          setPhoto={setPhoto}
+          globalTypesSelect={globalTypesSelect}
         />
       ) : null}
 
-      {modalName === "password" ? (
-        <PasswordModal
+      {modalName === "delete" ? (
+        <DeleteModal
           show={show}
           handleClose={handleClose}
           handleSave={handleSave}
           modalName={modalName}
-          password={password}
-          setPassword={setPassword}
+          globalTypes={globalTypes}
+          globalTypeId={globalTypeId}
+          subTypeId={subTypeId}
+          productId={productId}
+          products={products}
+          name={name}
+          price={price}
+          quantity={quantity}
+          photo={photo}
+          photoUrl={photoUrl}
+          setGlobalTypeId={setGlobalTypeId}
+          setSubTypeId={setSubTypeId}
+          setProductId={setProductId}
+          setPrice={setPrice}
+          setQuantity={setQuantity}
+          setName={setName}
+          setPhoto={setPhoto}
         />
       ) : null}
       {modalName === "photo" ? (
@@ -366,9 +420,9 @@ export function ProductPage() {
         />
       ) : null}
 
-      {users?.totalPages ? (
+      {products?.totalPages ? (
         <Pagination style={{ justifyContent: "center" }}>
-          {Array.from(Array(users.totalPages + 4).keys()).map((_, number) => (
+          {Array.from(Array(products.totalPages).keys()).map((_, number) => (
             <Pagination.Item
               key={number}
               active={number === page}
@@ -388,66 +442,162 @@ const CreateModal = ({
   handleClose,
   handleSave,
   modalName,
-  positions,
-  positionId,
-  username,
-  password,
-  setPositionId,
-  setUsername,
-  setPassword,
+  globalTypes,
+  globalTypeId,
+  subTypeId,
+  productId,
+  products,
+  name,
+  price,
+  quantity,
+  photo,
+  photoUrl,
+  setGlobalTypeId,
+  setSubTypeId,
+  setProductId,
+  setPrice,
+  setQuantity,
+  setName,
+  setPhoto,
+  globalTypesSelect,
 }) => (
-  <Modal show={show} onHide={handleClose}>
+  <AntModal
+    title={modalName}
+    open={show}
+    onOk={handleSave}
+    onCancel={handleClose}
+  >
+    {/* <Modal show={show} onHide={handleClose}>
     <Modal.Header closeButton>
       <Modal.Title>User {modalName}</Modal.Title>
     </Modal.Header>
-    <Modal.Body>
-      <Form.Group className="mb-3" controlId="formBasicUsername">
-        <Form.Label>Username</Form.Label>
-        <Form.Control
-          type="text"
-          name="username"
-          value={username}
-          onChange={(e) => {
-            setUsername(e.target.value.trim());
-          }}
-          placeholder="Enter username"
-        />
-        <Form.Text className="text-muted">Enter username.</Form.Text>
-      </Form.Group>
+    <Modal.Body> */}
+    <Form.Group className="mb-3" controlId="formBasicName">
+      <Form.Label>Name</Form.Label>
+      <Form.Control
+        type="text"
+        name="name"
+        value={name}
+        onChange={(e) => {
+          setName(e.target.value);
+        }}
+        placeholder="Enter name"
+      />
+      <Form.Text className="text-muted">Enter name.</Form.Text>
+    </Form.Group>
 
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label>Password</Form.Label>
-        <Form.Control
-          type="text"
-          name="password"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value.trim());
-          }}
-          placeholder="Enter password"
-        />
-        <Form.Text className="text-muted">Enter password</Form.Text>
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicPosition">
-        <Form.Label>Position</Form.Label>
-        <Form.Select
-          aria-label="position select"
-          selected={positionId}
-          onChange={(e) => setPositionId(e.target.value)}
-        >
-          <option value={0} key={0}>
-            Choose position
+    <Form.Group className="mb-3" controlId="formBasicQuantity">
+      <Form.Label>Quantity</Form.Label>
+      <Form.Control
+        type="number"
+        name="quantity"
+        value={quantity}
+        onChange={(e) => {
+          setQuantity(e.target.value);
+        }}
+        placeholder="Enter Quantity"
+      />
+      <Form.Text className="text-muted">Enter Quantity.</Form.Text>
+    </Form.Group>
+    <Form.Group className="mb-3" controlId="formBasicPrice">
+      <Form.Label>Price</Form.Label>
+      <Form.Control
+        type="number"
+        name="Price"
+        value={price}
+        onChange={(e) => {
+          setPrice(e.target.value);
+        }}
+        placeholder="Enter Price"
+      />
+      <Form.Text className="text-muted">Enter Price.</Form.Text>
+    </Form.Group>
+
+    {/* <Form.Group className="mb-3" controlId="formBasicGlobalType">
+      <Form.Label>GlobalType {globalTypeId}</Form.Label>
+      <Form.Select
+        aria-label="GlobalType select"
+        selected={globalTypeId}
+        onChange={(e) => setGlobalTypeId(e.target.value)}
+      >
+        <option value={0} key={0}>
+          Choose GlobalType
+        </option>
+        {globalTypes?.content?.map((glob) => (
+          <option key={glob.id} value={glob.id}>
+            {glob.name}
           </option>
-          {positions?.content?.map((pos) => (
-            <option key={pos.id} value={pos.id}>
-              {pos.name} - ${pos.salary}
+        ))}
+      </Form.Select>
+      <Form.Text className="text-muted">Choose GlobalType</Form.Text>
+    </Form.Group> */}
+    <Form.Group className="mb-3" controlId="formBasicSubType">
+      <Form.Label>SubType</Form.Label>
+      <Cascader
+        options={globalTypesSelect}
+        onChange={(selected) => {
+          console.log(selected);
+          setSubTypeId(selected[selected.length - 1]);
+        }}
+      />{" "}
+    </Form.Group>
+
+    {/* <Form.Group className="mb-3" controlId="formBasicSubType">
+      <Form.Label>SubType {subTypeId}</Form.Label>
+
+      <Form.Select
+        aria-label="SubType select"
+        selected={subTypeId}
+        onChange={(e) => setSubTypeId(e.target.value)}
+      >
+        <option value={0} key={0}>
+          Choose SubType
+        </option>
+        {globalTypes?.content?.subTypeList // ?.filter((x) => x.id === globalTypeId)[0]
+          ?.map((sub) => (
+            <option key={sub.id} value={sub.id}>
+              {sub.name}
             </option>
           ))}
-        </Form.Select>
-        <Form.Text className="text-muted">Choose postion</Form.Text>
-      </Form.Group>
-    </Modal.Body>
-    <Modal.Footer>
+      </Form.Select>
+      <Form.Text className="text-muted">Choose SubType</Form.Text>
+    </Form.Group> */}
+
+    <div className="d-flex justify-content-center">
+      {photoUrl ? (
+        <img
+          src={photo ? URL.createObjectURL(photo) : photoUrl}
+          alt="Avatar"
+          className="avatar"
+          style={{ width: "100px", height: "100px" }}
+        />
+      ) : (
+        <img
+          src={
+            photo
+              ? URL.createObjectURL(photo)
+              : "https://www.w3schools.com/w3images/avatar2.png"
+          }
+          alt="AvatarDefault"
+          className="avatar"
+        />
+      )}
+    </div>
+    <Form.Group className="mb-3" controlId="formBasicPhoto">
+      <Form.Label>Photo</Form.Label>
+      <Form.Control
+        type="file"
+        name="photo"
+        // value={photo}
+        onChange={(e) => {
+          setPhoto(e.target.files[0]);
+        }}
+        placeholder="Choose Photo"
+      />
+      <Form.Text className="text-muted">Choose Photo</Form.Text>
+    </Form.Group>
+    {/* </Modal.Body> */}
+    {/* <Modal.Footer>
       <Button variant="secondary" onClick={handleClose}>
         Close
       </Button>
@@ -455,7 +605,8 @@ const CreateModal = ({
         Create
       </Button>
     </Modal.Footer>
-  </Modal>
+  </Modal> */}
+  </AntModal>
 );
 
 const UpdateModal = ({
@@ -464,119 +615,186 @@ const UpdateModal = ({
   handleSave,
   modalName,
 
-  firstName,
-  lastName,
-  phoneNumber,
-  address,
-  setFirstName,
-  setLastName,
-  setPhoneNumber,
-  setAddress,
+  globalTypes,
+  globalTypeId,
+  subTypeId,
+  productId,
+  products,
+  name,
+  price,
+  quantity,
+  photo,
+  photoUrl,
+  setGlobalTypeId,
+  setSubTypeId,
+  setProductId,
+  setPrice,
+  setQuantity,
+  setName,
+  setPhoto,
+  globalTypesSelect,
 }) => (
-  <Modal show={show} onHide={handleClose}>
+  <AntModal
+    title={modalName}
+    open={show}
+    onOk={handleSave}
+    onCancel={handleClose}
+  >
+    {/* <Modal show={show} onHide={handleClose}>
     <Modal.Header closeButton>
       <Modal.Title>User {modalName}</Modal.Title>
     </Modal.Header>
-    <Modal.Body>
-      <Form.Group className="mb-3" controlId="formBasicfirstName">
-        <Form.Label>firstName</Form.Label>
-        <Form.Control
-          type="text"
-          name="firstName"
-          value={firstName}
-          onChange={(e) => {
-            setFirstName(e.target.value);
-          }}
-          placeholder="Enter firstName"
-        />
-        <Form.Text className="text-muted">Enter firstName.</Form.Text>
+    <Modal.Body> */}
+    <Form.Group className="mb-3" controlId="formBasicName">
+      <Form.Label>Name</Form.Label>
+      <Form.Control
+        type="text"
+        name="name"
+        value={name}
+        onChange={(e) => {
+          setName(e.target.value);
+        }}
+        placeholder="Enter name"
+      />
+      <Form.Text className="text-muted">Enter name.</Form.Text>
+    </Form.Group>
+
+    <Form.Group className="mb-3" controlId="formBasicQuantity">
+      <Form.Label>Quantity</Form.Label>
+      <Form.Control
+        type="number"
+        name="quantity"
+        value={quantity}
+        onChange={(e) => {
+          setQuantity(e.target.value);
+        }}
+        placeholder="Enter Quantity"
+      />
+      <Form.Text className="text-muted">Enter Quantity.</Form.Text>
+    </Form.Group>
+    <Form.Group className="mb-3" controlId="formBasicPrice">
+      <Form.Label>Price</Form.Label>
+      <Form.Control
+        type="number"
+        name="Price"
+        value={price}
+        onChange={(e) => {
+          setPrice(e.target.value);
+        }}
+        placeholder="Enter Price"
+      />
+      <Form.Text className="text-muted">Enter Price.</Form.Text>
+    </Form.Group>
+
+    {/* <Form.Group className="mb-3" controlId="formBasicGlobalType">
+        <Form.Label>GlobalType {globalTypeId}</Form.Label>
+        <Form.Select
+          aria-label="GlobalType select"
+          selected={globalTypeId}
+          onChange={(e) => setGlobalTypeId(e.target.value)}
+        >
+          <option value={0} key={0}>
+            Choose GlobalType
+          </option>
+          {globalTypes?.content?.map((glob) => (
+            <option key={glob.id} value={glob.id}>
+              {glob.name}
+            </option>
+          ))}
+        </Form.Select>
+        <Form.Text className="text-muted">Choose GlobalType</Form.Text>
       </Form.Group>
 
-      <Form.Group className="mb-3" controlId="formBasiclastName">
-        <Form.Label>lastName</Form.Label>
-        <Form.Control
-          type="text"
-          name="lastName"
-          value={lastName}
-          onChange={(e) => {
-            setLastName(e.target.value);
-          }}
-          placeholder="Enter lastName"
+      <Form.Group className="mb-3" controlId="formBasicSubType">
+        <Form.Label>SubType {subTypeId}</Form.Label>
+        <Form.Select
+          aria-label="SubType select"
+          selected={subTypeId}
+          onChange={(e) => setSubTypeId(e.target.value)}
+        >
+          <option value={0} key={0}>
+            Choose SubType
+          </option>
+          {globalTypes?.content
+            ?.filter((x) => x.id === globalTypeId)[0]
+            ?.subTypeList?.map((sub) => (
+              <option key={sub.id} value={sub.id}>
+                {sub.name}
+              </option>
+            ))}
+        </Form.Select>
+        <Form.Text className="text-muted">Choose SubType</Form.Text>
+      </Form.Group> */}
+    <Form.Group className="mb-3" controlId="formBasicSubType">
+      <Form.Label>SubType</Form.Label>
+      <Cascader
+        options={globalTypesSelect}
+        onChange={(selected) => {
+          console.log(selected);
+          setSubTypeId(selected[selected.length - 1]);
+        }}
+      />{" "}
+    </Form.Group>
+    <div className="d-flex justify-content-center">
+      {photoUrl ? (
+        <img
+          src={photo ? URL.createObjectURL(photo) : photoUrl}
+          alt="Avatar"
+          className="avatar"
+          style={{ width: "100px", height: "100px" }}
         />
-        <Form.Text className="text-muted">Enter lastName</Form.Text>
-      </Form.Group>
-
-      <Form.Group className="mb-3" controlId="formBasicphoneNumber">
-        <Form.Label>phoneNumber</Form.Label>
-        <Form.Control
-          type="telephone"
-          name="phoneNumber"
-          value={phoneNumber}
-          onChange={(e) => {
-            setPhoneNumber(e.target.value);
-          }}
-          placeholder="Enter phoneNumber"
+      ) : (
+        <img
+          src={
+            photo
+              ? URL.createObjectURL(photo)
+              : "https://www.w3schools.com/w3images/avatar2.png"
+          }
+          alt="AvatarDefault"
+          className="avatar"
         />
-        <Form.Text className="text-muted">Enter phoneNumber</Form.Text>
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicaddress">
-        <Form.Label>address</Form.Label>
-        <Form.Control
-          type="text"
-          name="address"
-          value={address}
-          onChange={(e) => {
-            setAddress(e.target.value);
-          }}
-          placeholder="Enter address"
-        />
-        <Form.Text className="text-muted">Enter address</Form.Text>
-      </Form.Group>
-    </Modal.Body>
+      )}
+    </div>
+    <Form.Group className="mb-3" controlId="formBasicPhoto">
+      <Form.Label>Photo</Form.Label>
+      <Form.Control
+        type="file"
+        name="photo"
+        // value={photo}
+        onChange={(e) => {
+          setPhoto(e.target.files[0]);
+        }}
+        placeholder="Choose Photo"
+      />
+      <Form.Text className="text-muted">Choose Photo</Form.Text>
+    </Form.Group>
+    {/* </Modal.Body>
     <Modal.Footer>
       <Button variant="secondary" onClick={handleClose}>
         Close
       </Button>
       <Button variant="primary" onClick={handleSave}>
-        Update
+        Update Photo
       </Button>
     </Modal.Footer>
-  </Modal>
+  </Modal> */}
+  </AntModal>
 );
 
-const PasswordModal = ({
-  show,
-  handleClose,
-  handleSave,
-  modalName,
-  password,
-  setPassword,
-}) => (
+const DeleteModal = ({ show, handleClose, handleSave, name }) => (
   <Modal show={show} onHide={handleClose}>
     <Modal.Header closeButton>
-      <Modal.Title>User {modalName}</Modal.Title>
+      <Modal.Title>Delete product</Modal.Title>
     </Modal.Header>
     <Modal.Body>
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label>Password</Form.Label>
-        <Form.Control
-          type="text"
-          name="password"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value.trim());
-          }}
-          placeholder="Enter password"
-        />
-        <Form.Text className="text-muted">Enter password</Form.Text>
-      </Form.Group>
+      <p>Are you sure? {name}</p>
     </Modal.Body>
     <Modal.Footer>
       <Button variant="secondary" onClick={handleClose}>
         Close
       </Button>
       <Button variant="primary" onClick={handleSave}>
-        Update password
+        "Delete"
       </Button>
     </Modal.Footer>
   </Modal>

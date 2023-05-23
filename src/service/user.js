@@ -72,6 +72,12 @@ function updateMe(firstName, lastName, phoneNumber, address) {
     address,
   });
 }
+function blockUser(){
+  return api.put(`/api/user/enable`, {
+    id,
+    enable,
+  });
+}
 export default {
   update,
   list,
@@ -83,4 +89,5 @@ export default {
   updatePasswordMe,
   updatePhotoMe,
   updateMe,
+  blockUser
 };

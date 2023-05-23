@@ -1,6 +1,6 @@
 import api from "./http";
 
-function list(pageNo = 1, pageSize = 4) {
+function list(pageNo = 0, pageSize = 4) {
   return api.get("/api/apartment", {
     params: {
       pageNo,
@@ -9,21 +9,24 @@ function list(pageNo = 1, pageSize = 4) {
   });
 }
 //CRUD
-function save(roomNumber, area, pricePerArea, img,
-  buildingId ) {
-  return api.post(`/api/apartmen`, {
-    roomNumber,
-    area,
-    pricePerArea,
-    img,
-    buildingId
+function save(roomNumber, area, pricePerArea, img, buildingId) {
+  var formData = new FormData();
+  formData.append("img", img);
+  formData.append("roomNumber", roomNumber);
+  formData.append("area", area);
+  formData.append("pricePerArea", pricePerArea);
+  formData.append("buildingId", buildingId);
+
+  return api.post(`/api/apartment`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
   });
 }
-function detail(apartmentId ) {
-  return api.get(`/api/apartment/${apartmentId }`);
+function detail(apartmentId) {
+  return api.get(`/api/apartment/${apartmentId}`);
 }
-function update(id, roomNumber, area, pricePerArea,
-  status,buildingId ) {
+function update(id, roomNumber, area, pricePerArea, status, buildingId) {
   return api.put(`/api/apartment`, {
     id,
     roomNumber,
@@ -31,7 +34,6 @@ function update(id, roomNumber, area, pricePerArea,
     pricePerArea,
     status,
     buildingId,
-    
   });
 }
 

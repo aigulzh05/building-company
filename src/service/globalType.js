@@ -1,6 +1,6 @@
 import api from "./http";
 
-function list(pageNo = 1, pageSize = 10) {
+function list(pageNo = 0, pageSize = 10) {
   return api.get("/api/global-type", {
     params: {
       pageNo,

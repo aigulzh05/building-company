@@ -61,12 +61,16 @@ export function Layout() {
                       <NavDropdown.Item as={Link} to="/addApartment">
                         Add Apartment
                       </NavDropdown.Item>
+                      <NavDropdown.Item as={Link} to="/purcase">
+                        Check purcase
+                      </NavDropdown.Item>
+                      <NavDropdown.Item as={Link} to="/addNews">
+                        Add news
+                      </NavDropdown.Item>
                       <NavDropdown.Item as={Link} to="/global">
                         Global type
                       </NavDropdown.Item>
-                      <NavDropdown.Item as={Link} to="/sub">
-                        Sub type
-                      </NavDropdown.Item>
+                      
                       <NavDropdown.Item as={Link} to="/product">
                         Product
                       </NavDropdown.Item>

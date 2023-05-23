@@ -128,7 +128,7 @@ export function BuildingsPage() {
                     </p>
                   </Card.Text>
                   <a href="#" target={"_blank"}>
-                    <Button variant={index == 0 ? "primary" : "secondary"}>
+                    <Button variant={"secondary"}>
                       {card.state}
                     </Button>
                   </a>

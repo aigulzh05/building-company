@@ -6,10 +6,11 @@ import Pagination from "react-bootstrap/Pagination";
 import Table from "react-bootstrap/Table";
 
 import ApartmentService from "../service/apartment";
-
-
+import BuildingService from "../service/building";
 
 export function AddApartmentPage() {
+  const [buildings, setBuildings] = useState(null);
+
   const [apartments, setApartments] = useState(null);
   const [page, setPage] = useState(0);
   const [apartmentId, setApartmentId] = useState(0);
@@ -21,7 +22,10 @@ export function AddApartmentPage() {
   const [area, setArea] = useState("");
   const [pricePerArea, setPricePerArea] = useState("");
   const [description, setDescription] = useState("");
-  const [buildingId, setBuildingId] = useState("");
+
+  const [buildingId, setBuildingId] = useState(0);
+  const [buildingName, setBuildingName] = useState("");
+
   const [numberOfApartments, setNumberOfApartments] = useState("");
 
   const [img, setImg] = useState("");
@@ -32,8 +36,22 @@ export function AddApartmentPage() {
 
   useEffect(() => {
     getApartmentsFromServer(0);
+    getBuildingsFromServer();
   }, []);
 
+  const getBuildingsFromServer = () => {
+    BuildingService.list(0)
+      .then((res) => {
+        console.log({ res });
+        if (res.error) {
+          return;
+        }
+        setBuildings(res.data);
+      })
+      .catch((error) => {
+        console.log({ error });
+      });
+  };
   const getApartmentsFromServer = (pageNumber) => {
     setLoading(true);
     ApartmentService.list(pageNumber)
@@ -58,13 +76,12 @@ export function AddApartmentPage() {
   const updateApartmentFromServer = () => {
     setLoading(true);
     ApartmentService.update(
-      id,
+      apartmentId,
       roomNumber,
       area,
-      name,
       pricePerArea,
       status,
-      buildingId,
+      parseInt(buildingId)
     )
       .then((res) => {
         console.log(res);
@@ -80,14 +97,7 @@ export function AddApartmentPage() {
   const createApartmentFromServer = () => {
     setLoading(true);
 
-    ApartmentService.save(
-      id,
-      roomNumber,
-      area,
-      pricePerArea,
-      status,
-      buildingId,
-    )
+    ApartmentService.save(roomNumber, area, pricePerArea, img, buildingId)
       .then((res) => {
         console.log(res);
       })
@@ -129,7 +139,6 @@ export function AddApartmentPage() {
       setPricePerArea("");
       setImg("");
       setApartmentId("");
-    
     }
     if (action === "update") {
       //update
@@ -143,18 +152,16 @@ export function AddApartmentPage() {
       setArea(thisApartment.area);
       setPricePerArea(thisApartment.pricePerArea);
       setStatus(thisApartment.status);
-      setBuildingId(thisApartment.buildingId);
-      
-      
+      setBuildingId(thisApartment?.building?.id || 1);
     }
     if (action === "photo") {
       //photo
-       const thisUser = apartments?.content?.filter((u) => u.id === id)[0];
-      const thisapartment = apartments?.content[0];
-      setPhotoUrl(thisapartment.imgUrl);
+      // const thisUser = apartments?.content?.filter((u) => u.id === id)[0];
+      const thisApartment = apartments?.content[0];
+      setPhotoUrl(thisApartment.imgUrl);
       setImg(null);
-     // setBuildingId(1);
-     setApartmentId(thisApartment.id);
+      // setBuildingId(1);
+      setApartmentId(thisApartment.id);
     }
   };
 
@@ -194,11 +201,12 @@ export function AddApartmentPage() {
           <thead>
             <tr>
               <th>#</th>
-              <th>roomNumber</th>
-              <th>area</th>
-              <th>pricePerArea</th>
-              <th>img</th>
-              <th>globalType</th>
+              <th></th>
+              <th>Room Number</th>
+              <th>Area</th>
+              <th>Price per area</th>
+              <th>Image</th>
+              
               <th>Actions</th>
             </tr>
           </thead>
@@ -210,9 +218,6 @@ export function AddApartmentPage() {
                 <td>{apartment.roomNumber}</td>
                 <td>{apartment.area}</td>
                 <td>{apartment.pricePerArea}</td>
-                
-
-                
 
                 <td>
                   {apartment.imgUrl ? (
@@ -258,27 +263,21 @@ export function AddApartmentPage() {
           handleClose={handleClose}
           handleSave={handleSave}
           modalName={modalName}
-          dateStart={dateStart}
-          name={name}
-          dateEnd={dateEnd}
-          description={description}
-          numberOfFloors={numberOfFloors}
-          numberOfApartments={numberOfApartments}
-          address={address}
+          roomNumber={roomNumber}
+          area={area}
+          pricePerArea={pricePerArea}
+          buildingId={buildingId}
           img={img}
-
-          state={state}
+          status={status}
           setModal={setModal}
-          setDateStart={setDateStart}
-          setName={setName}
-          setDateEnd={setDateEnd}
-          setDescription={setDescription}
-          setNumberOfFloors={setNumberOfFloors}
-          setNumberOfApartments={setNumberOfApartments}
-          setAddress={setAddress}
+          setRoomNumber={setRoomNumber}
+          setArea={setArea}
+          setPricePerArea={setPricePerArea}
+          setBuildingId={setBuildingId}
           setImg={setImg}
           setShow={setShow}
-          setState={setState}
+          setStatus={setStatus}
+          buildings={buildings}
         />
       ) : null}
 
@@ -288,27 +287,21 @@ export function AddApartmentPage() {
           handleClose={handleClose}
           handleSave={handleSave}
           modalName={modalName}
-          dateStart={dateStart}
-          name={name}
-          dateEnd={dateEnd}
-          description={description}
-          numberOfFloors={numberOfFloors}
-          numberOfApartments={numberOfApartments}
-          address={address}
+          roomNumber={roomNumber}
+          area={area}
+          pricePerArea={pricePerArea}
+          buildingId={buildingId}
           img={img}
-          photoUrl={photoUrl}
-          state={state}
+          status={status}
           setModal={setModal}
-          setDateStart={setDateStart}
-          setName={setName}
-          setDateEnd={setDateEnd}
-          setDescription={setDescription}
-          setNumberOfFloors={setNumberOfFloors}
-          setNumberOfApartments={setNumberOfApartments}
-          setAddress={setAddress}
+          setRoomNumber={setRoomNumber}
+          setArea={setArea}
+          setPricePerArea={setPricePerArea}
+          setBuildingId={setBuildingId}
           setImg={setImg}
           setShow={setShow}
-          setState={setState}
+          setStatus={setStatus}
+          buildings={buildings}
         />
       ) : null}
 
@@ -324,9 +317,9 @@ export function AddApartmentPage() {
         />
       ) : null}
 
-      {buildings?.totalPages ? (
+      {apartments?.totalPages ? (
         <Pagination style={{ justifyContent: "center" }}>
-          {Array.from(Array(buildings.totalPages).keys()).map((_, number) => (
+          {Array.from(Array(apartments.totalPages).keys()).map((_, number) => (
             <Pagination.Item
               key={number}
               active={number === page}
@@ -346,19 +339,15 @@ const CreateModal = ({
   handleClose,
   handleSave,
   modalName,
-  apartmentId,
   roomNumber,
   area,
   pricePerArea,
-  status,
   buildingId,
   img,
-
-  setApartmentId,
+  buildings,
   setRoomNumber,
   setArea,
   setPricePerArea,
-  setStatus,
   setBuildingId,
   setImg,
 }) => (
@@ -367,8 +356,8 @@ const CreateModal = ({
       <Modal.Title>Apartment {modalName}</Modal.Title>
     </Modal.Header>
     <Modal.Body>
-      <Form.Group className="mb-3" controlId="formBasicDateStart">
-        <Form.Label>roomNumber</Form.Label>
+      <Form.Group className="mb-3" controlId="formBasicRoomNumber">
+        <Form.Label>Room number</Form.Label>
         <Form.Control
           type="text"
           name="roomNumber"
@@ -381,7 +370,7 @@ const CreateModal = ({
         <Form.Text className="text-muted">Enter room number.</Form.Text>
       </Form.Group>
 
-      <Form.Group className="mb-3" controlId="formBasicDateEnd">
+      <Form.Group className="mb-3" controlId="formBasicArea">
         <Form.Label>Area</Form.Label>
         <Form.Control
           type="text"
@@ -396,7 +385,7 @@ const CreateModal = ({
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPricePerArea">
-        <Form.Label>pricePerArea</Form.Label>
+        <Form.Label>Price per area</Form.Label>
         <Form.Control
           type="text"
           name="nampricePerAreae"
@@ -409,20 +398,24 @@ const CreateModal = ({
         <Form.Text className="text-muted">Enter price Per Area.</Form.Text>
       </Form.Group>
 
-      <Form.Group className="mb-3" controlId="formBasicBuildingId">
-        <Form.Label></Form.Label>
-        <Form.Control
-          type="text"
-          name="buildingId"
-          value={buildingId}
-          onChange={(e) => {
-            setBuildingId(e.target.value);
-          }}
-          placeholder="Enter description"
-        />
-        <Form.Text className="text-muted">Enter description.</Form.Text>
+      <Form.Group className="mb-3" controlId="formBasicPosition">
+        <Form.Label>Building</Form.Label>
+        <Form.Select
+          aria-label="building select"
+          selected={buildingId}
+          onChange={(e) => setBuildingId(e.target.value)}
+        >
+          <option value={0} key={0}>
+            Choose building
+          </option>
+          {buildings?.content?.map((building) => (
+            <option key={building.id} value={building.id}>
+              {building.name}
+            </option>
+          ))}
+        </Form.Select>
+        <Form.Text className="text-muted">Choose building</Form.Text>
       </Form.Group>
-
 
       <div className="d-flex justify-content-center">
         <img
@@ -465,131 +458,85 @@ const UpdateModal = ({
   handleClose,
   handleSave,
   modalName,
-
-  dateStart,
-  name,
-  dateEnd,
-  description,
-  numberOfFloors,
-  numberOfApartments,
-  address,
+  roomNumber,
+  area,
+  pricePerArea,
+  buildingId,
   img,
-  state,
-  photoUrl,
-  setDateStart,
-  setName,
-  setDateEnd,
-  setDescription,
-  setNumberOfFloors,
-  setNumberOfApartments,
-  setAddress,
+  status,
+  setRoomNumber,
+  setArea,
+  setPricePerArea,
+  setBuildingId,
   setImg,
-  setState,
+  setStatus,
+  buildings,
+  photoUrl,
 }) => (
   <Modal show={show} onHide={handleClose}>
     <Modal.Header closeButton>
       <Modal.Title>Apartment {modalName}</Modal.Title>
     </Modal.Header>
     <Modal.Body>
-      <Form.Group className="mb-3" controlId="formBasicDateStart">
-        <Form.Label>dateStart</Form.Label>
-        <Form.Control
-          type="date"
-          name="dateStart"
-          value={dateStart}
-          onChange={(e) => {
-            setDateStart(e.target.value);
-          }}
-          placeholder="Enter date to start"
-        />
-        <Form.Text className="text-muted">Enter date to start.</Form.Text>
-      </Form.Group>
-
-      <Form.Group className="mb-3" controlId="formBasicDateEnd">
-        <Form.Label>dateEnd</Form.Label>
-        <Form.Control
-          type="date"
-          name="dateEnd"
-          value={dateEnd}
-          onChange={(e) => {
-            setDateEnd(e.target.value);
-          }}
-          placeholder="Enter date to end"
-        />
-        <Form.Text className="text-muted">Enter date to end.</Form.Text>
-      </Form.Group>
-
-      <Form.Group className="mb-3" controlId="formBasicName">
-        <Form.Label></Form.Label>
+      <Form.Group className="mb-3" controlId="formBasicRoomNumber">
+        <Form.Label>roomNumber</Form.Label>
         <Form.Control
           type="text"
-          name="name"
-          value={name}
+          name="roomNumber"
+          value={roomNumber}
           onChange={(e) => {
-            setName(e.target.value);
+            setRoomNumber(e.target.value);
           }}
-          placeholder="Enter name"
+          placeholder="Enter room number"
         />
-        <Form.Text className="text-muted">Enter name.</Form.Text>
+        <Form.Text className="text-muted">Enter room number.</Form.Text>
       </Form.Group>
 
-      <Form.Group className="mb-3" controlId="formBasicDescription">
-        <Form.Label></Form.Label>
+      <Form.Group className="mb-3" controlId="formBasicArea">
+        <Form.Label>Area</Form.Label>
         <Form.Control
           type="text"
-          name="description"
-          value={description}
+          name="area"
+          value={area}
           onChange={(e) => {
-            setDescription(e.target.value);
+            setArea(e.target.value);
           }}
-          placeholder="Enter description"
+          placeholder="Enter area"
         />
-        <Form.Text className="text-muted">Enter description.</Form.Text>
+        <Form.Text className="text-muted">Enter area.</Form.Text>
       </Form.Group>
 
-      <Form.Group className="mb-3" controlId="formBasicNumberOfFloors">
-        <Form.Label></Form.Label>
+      <Form.Group className="mb-3" controlId="formBasicPricePerArea">
+        <Form.Label>pricePerArea</Form.Label>
         <Form.Control
           type="text"
-          name="numberOfFloors"
-          value={numberOfFloors}
+          name="nampricePerAreae"
+          value={pricePerArea}
           onChange={(e) => {
-            setNumberOfFloors(e.target.value);
+            setPricePerArea(e.target.value);
           }}
-          placeholder="Enter number of floors"
+          placeholder="Enter pricePerArea"
         />
-        <Form.Text className="text-muted">
-          Enter nameber of appartments.
-        </Form.Text>
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicNumberOfapp">
-        <Form.Label></Form.Label>
-        <Form.Control
-          type="text"
-          name="numberOfApartments"
-          value={numberOfApartments}
-          onChange={(e) => {
-            setNumberOfApartments(e.target.value);
-          }}
-          placeholder="Enter number of floors"
-        />
-        <Form.Text className="text-muted">
-          Enter nameber of appartments.
-        </Form.Text>
+        <Form.Text className="text-muted">Enter price Per Area.</Form.Text>
       </Form.Group>
 
-      <Form.Group className="mb-3" controlId="formBasicAddress">
-        <Form.Label></Form.Label>
-        <Form.Control
-          type="text"
-          name="address"
-          value={address}
-          onChange={(e) => {
-            setAddress(e.target.value);
-          }}
-          placeholder="Enter address"
-        />
-        <Form.Text className="text-muted">Enter address.</Form.Text>
+      <Form.Group className="mb-3" controlId="formBasicPosition">
+        <Form.Label>building</Form.Label>
+        <Form.Select
+          aria-label="building select"
+          selected={buildingId}
+          onChange={(e) => setBuildingId(e.target.value)}
+        >
+          <option value={0} key={0}>
+            Choose building
+          </option>
+          {buildings?.content?.map((building) => (
+            <option key={building.id} value={building.id}>
+              {building.name}
+            </option>
+          ))}
+        </Form.Select>
+        <Form.Text className="text-muted">Choose building</Form.Text>
       </Form.Group>
 
       <div className="d-flex justify-content-center">
@@ -609,25 +556,24 @@ const UpdateModal = ({
         )}
       </div>
 
-      <Form.Group className="mb-3" controlId="formBasicstate">
-        <Form.Label>state</Form.Label>
+      <Form.Group className="mb-3" controlId="formBasicStatus">
+        <Form.Label>status</Form.Label>
         <Form.Select
-          aria-label="state select"
+          aria-label="status select"
           // selected={state}
-          defaultValue={state}
-          onChange={(e) => setState(e.target.value)}
+          defaultValue={status}
+          onChange={(e) => setStatus(e.target.value)}
         >
           <option value={0} key={0}>
             Choose state
           </option>
           {[
-            { id: "COMPLETED", name: "COMPLETED" },
-            { id: "INPROCESS", name: "INPROCESS" },
-            { id: "SUSPEND", name: "SUSPEND" },
-            { id: "ESTIMATED", name: "ESTIMATED" },
-          ].map((stateItem) => (
-            <option key={stateItem.id} value={stateItem.id}>
-              {stateItem.name}
+            { id: "SOLD", name: "SOLD" },
+            { id: "FREE ", name: "FREE" },
+            { id: "RESERVED", name: "RESERVED" },
+          ].map((statusItem) => (
+            <option key={statusItem.id} value={statusItem.id}>
+              {statusItem.name}
             </option>
           ))}
         </Form.Select>
@@ -656,7 +602,7 @@ const PhotoModal = ({
 }) => (
   <Modal show={show} onHide={handleClose}>
     <Modal.Header closeButton>
-      <Modal.Title>Building {modalName}</Modal.Title>
+      <Modal.Title>Apartment {modalName}</Modal.Title>
     </Modal.Header>
     <Modal.Body>
       <div className="d-flex justify-content-center">

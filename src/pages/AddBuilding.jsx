@@ -7,7 +7,6 @@ import Table from "react-bootstrap/Table";
 
 import BuildingService from "../service/building";
 
-
 export function AddBuildingPage() {
   const [buildings, setBuildings] = useState(null);
   const [page, setPage] = useState(0);

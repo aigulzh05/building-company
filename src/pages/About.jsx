@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export function AboutPage() {
+export function AboutPage(){
   return (
     <div
       style={{
