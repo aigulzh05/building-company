@@ -124,7 +124,7 @@ export function PurcaseRequestPage() {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Purcase Request {modalName}</Modal.Title>
+          <Modal.Title>Purchase Request {modalName}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {modalName === "delete" ? (
