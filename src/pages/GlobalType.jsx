@@ -336,7 +336,7 @@ const CreateModal = ({ show, handleClose, handleSave, name, setName }) => (
           onChange={(e) => {
             setName(e.target.value);
           }}
-          placeholder="Enter position"
+          placeholder="Enter name"
         />
         <Form.Text className="text-muted">Enter global type name.</Form.Text>
       </Form.Group>

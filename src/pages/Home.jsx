@@ -38,8 +38,8 @@ export function HomePage() {
               <img
                 className="d-block w-100"
                 src={
-                  news.photoUrl
-                    ? news.photoUrl
+                  news.imgUrl
+                    ? news.imgUrl
                     : "https://f.partnerkin.com/uploads/storage/files/file_1622032085.gif"
                 }
                 alt="First slide"

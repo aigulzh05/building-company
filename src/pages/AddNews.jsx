@@ -145,9 +145,9 @@ export function AddNewsPage() {
                   <td>{news.header}</td>
                   <td>{news.text}</td>
                   <td>
-                    {news.photoUrl ? (
+                    {news.imgUrl ? (
                       <img
-                        src={news.photoUrl}
+                        src={news.imgUrl}
                         alt="Avatar"
                         className="avatar"
                       />
@@ -199,7 +199,7 @@ export function AddNewsPage() {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Postion {modalName}</Modal.Title>
+          <Modal.Title>News {modalName}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {modalName === "delete" ? (
@@ -253,11 +253,11 @@ export function AddNewsPage() {
                   />
                 )}
               </div>
-              <Form.Group className="mb-3" controlId="formBasicPhoto">
+              <Form.Group className="mb-3" controlId="formBasicIMg">
                 <Form.Label>Photo</Form.Label>
                 <Form.Control
                   type="file"
-                  name="photo"
+                  name="img"
                   // value={photo}
                   onChange={(e) => {
                     setImg(e.target.files[0]);
