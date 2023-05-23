@@ -256,7 +256,7 @@ export function ProductPage() {
   };
   return (
     <div className="p-2">
-      <h2 className="text-center">product page</h2>
+      <h2 className="text-center">ADD PRODUCT</h2>
 
       {message}
       {products ? (

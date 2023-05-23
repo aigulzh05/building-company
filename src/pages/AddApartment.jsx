@@ -184,7 +184,7 @@ export function AddApartmentPage() {
   };
   return (
     <div className="p-2">
-      <h2 className="text-center">apartment page</h2>
+      <h2 className="text-center">ADD APARTMENT </h2>
 
       {message}
       {apartments ? (

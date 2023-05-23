@@ -182,7 +182,7 @@ export function AddBuildingPage() {
   };
   return (
     <div className="p-2">
-      <h2 className="text-center">building page</h2>
+      <h2 className="text-center">ADD BUILDING</h2>
 
       {message}
       {buildings ? (

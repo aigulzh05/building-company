@@ -217,7 +217,7 @@ export function UserPage() {
   };
   return (
     <div className="p-2">
-      <h2 className="text-center">user page</h2>
+      <h2 className="text-center">ADD WORKER PAGE</h2>
 
       {message}
       {users ? (

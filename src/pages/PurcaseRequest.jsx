@@ -85,7 +85,7 @@ export function PurcaseRequestPage() {
   }
   return (
     <div style={{ padding: "20px" }}>
-      <h2 style={{ textAlign: "center" }}>purcase page</h2>
+      <h2 style={{ textAlign: "center" }}>PURCHASE</h2>
       {message}
       {purcaseRequests?.content ? (
         <>

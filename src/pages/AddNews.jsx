@@ -121,7 +121,7 @@ export function AddNewsPage() {
   };
   return (
     <div style={{ padding: "20px" }}>
-      <h2 style={{ textAlign: "center" }}>News page</h2>
+      <h2 style={{ textAlign: "center" }}>ADD NEWS</h2>
       {message}
       {newsList?.content ? (
         <>
